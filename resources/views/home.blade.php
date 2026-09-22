@@ -3,55 +3,31 @@
     $whatsappNumber = '6281234567890';
     $whatsappMessage = rawurlencode('Shalom, saya ingin bertanya tentang GKKD Denpasar.');
 
-    // Jadwal ibadah & pertemuan jemaat.
+    // Kegiatan & pertemuan jemaat.
     $schedules = [
         [
-            'title' => 'Ibadah Raya 1',
-            'time' => 'Pukul 09.00 WITA',
+            'title' => 'Pelayanan',
+            'time' => 'Bersamaan dengan Ibadah',
             'day' => 'Minggu',
-            'badge' => 'Minggu Pagi',
-            'desc' => 'Pujian, penyembahan, dan pengajaran firman yang praktis untuk kehidupan sehari-hari.',
-            'link' => route('kegiatan.ibadah-raya'),
+            'badge' => 'Tim Pelayanan',
+            'desc' => 'Ragam tim pelayanan gereja: musik, multimedia, diakonia, doa, anak, dan generasi muda.',
+            'link' => route('kegiatan.pelayanan'),
         ],
         [
-            'title' => 'Ibadah Raya 2',
-            'time' => 'Pukul 17.00 WITA',
-            'day' => 'Minggu',
-            'badge' => 'Minggu Sore',
-            'desc' => 'Ibadah petang yang hangat dan akrab, banyak dihadiri mahasiswa dan kaum profesional.',
-            'link' => route('kegiatan.ibadah-raya'),
-        ],
-        [
-            'title' => 'Doa Bersama',
-            'time' => 'Pukul 19.00 WITA',
-            'day' => 'Rabu',
-            'badge' => 'Rabu Malam',
-            'desc' => 'Waktu berdoa syafaat bagi jemaat, pemulihan keluarga, dan kesejahteraan pulau Bali.',
-            'link' => route('kegiatan.doa-bersama'),
-        ],
-        [
-            'title' => 'Sekolah Minggu',
-            'time' => 'Pukul 09.00 WITA',
-            'day' => 'Minggu',
-            'badge' => 'Usia 1–12 thn',
-            'desc' => 'Kelas belajar firman interaktif, musik ceria, dan aktivitas kreatif bagi anak.',
-            'link' => route('kegiatan.sekolah-minggu'),
-        ],
-        [
-            'title' => 'Persekutuan Wilayah',
+            'title' => 'Komsel',
             'time' => 'Pukul 19.30 WITA',
             'day' => 'Kamis / Jumat',
             'badge' => 'Komunitas Sel',
-            'desc' => 'Kelompok kecil di Renon, Sanur, Denpasar Barat, dan Badung untuk saling peduli.',
-            'link' => route('kegiatan.persekutuan-wilayah'),
+            'desc' => 'Kelompok kecil di rumah-rumah jemaat di Renon, Sanur, Denpasar Barat, dan Badung untuk saling peduli.',
+            'link' => route('kegiatan.komsel'),
         ],
         [
-            'title' => 'Doa Fajar / Pagi',
-            'time' => 'Pukul 06.00 WITA',
-            'day' => 'Sabtu',
-            'badge' => 'Sabtu Pagi',
-            'desc' => 'Mencari hadirat Tuhan mengawali akhir pekan dalam persekutuan doa dan ucapan syukur.',
-            'link' => route('kegiatan.doa-bersama'),
+            'title' => 'Retret / Camp',
+            'time' => 'Tahunan',
+            'day' => 'Sep / Des',
+            'badge' => 'Keluarga & Pemuda',
+            'desc' => 'Retret keluarga, camp pemuda, dan camp anak tahunan untuk pembaharuan iman dan relasi.',
+            'link' => route('kegiatan.retret-camp'),
         ],
     ];
 
@@ -468,63 +444,6 @@
                                     <path fill-rule="evenodd" d="M8 1.5a.75.75 0 0 1 .75.75v6.19l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06l2.22 2.22V2.25A.75.75 0 0 1 8 1.5Z" clip-rule="evenodd"/>
                                 </svg>
                                 Unduh Slide PPT
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- ── Kartu 2 ── --}}
-                <div class="group flex flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-sm transition-all hover:border-accent/40 hover:shadow-md lg:flex-row">
-                    {{-- Foto Pendeta (Kiri) --}}
-                    <div class="relative h-64 w-full shrink-0 overflow-hidden bg-ink/5 sm:h-72 lg:h-auto lg:w-80 xl:w-96">
-                        <img
-                            src="https://picsum.photos/seed/pastor-maria/600/600"
-                            alt="Foto Pdt. Maria Santoso"
-                            loading="lazy"
-                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        >
-                    </div>
-
-                    {{-- Informasi Khotbah (Kanan) --}}
-                    <div class="flex flex-1 flex-col justify-between p-6 sm:p-8 lg:p-10">
-                        <div>
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent dark:text-accent-soft">
-                                    Ibadah Raya Minggu Sore
-                                </span>
-                                <span class="text-xs text-muted">Minggu, 14 September 2025 &bull; 17.00 WITA</span>
-                            </div>
-
-                            <h3 class="mt-3 text-2xl font-bold leading-tight text-ink sm:text-3xl">
-                                Mengikut Yesus dengan Sepenuh Hati
-                            </h3>
-
-                            <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-ink">
-                                <span>Pdt. Maria Santoso</span>
-                                <span class="text-line" aria-hidden="true">&bull;</span>
-                                <span class="inline-flex items-center gap-1.5 text-accent dark:text-accent-soft font-semibold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4 shrink-0" aria-hidden="true">
-                                        <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687ZM7.5 14.055c-.935-.531-2.12-.603-3.213-.492-1.18.117-2.37.46-3.287.81V3.58c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v10.523ZM7.5 1.75a.75.75 0 0 1 1.5 0 .75.75 0 0 1-1.5 0Z"/>
-                                    </svg>
-                                    Lukas 9:23&ndash;25
-                                </span>
-                            </div>
-
-                            <p class="mt-4 text-base leading-relaxed text-muted">
-                                Panggilan menyangkal diri dan memikul salib bukan sebuah beban, melainkan undangan untuk menemukan kehidupan yang sesungguhnya bersama Kristus setiap hari.
-                            </p>
-                        </div>
-
-                        {{-- Action Buttons --}}
-                        <div class="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-6">
-                            <a
-                                href="{{ route('kegiatan.khotbah.show', 'mengikut-yesus-dengan-sepenuh-hati') }}"
-                                class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
-                            >
-                                <span>Lihat Detail Khotbah</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.69l-4.22-4.22a.75.75 0 0 1 1.06-1.06l5.5 5.5a.75.75 0 0 1 0 1.06l-5.5 5.5a.75.75 0 1 1-1.06-1.06l4.22-4.22H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
-                                </svg>
                             </a>
                         </div>
                     </div>

@@ -13,10 +13,9 @@
             'href' => route('kegiatan.index'),
             'active' => request()->routeIs('kegiatan.*'),
             'children' => [
-                ['label' => 'Ibadah Raya', 'href' => route('kegiatan.ibadah-raya'), 'active' => request()->routeIs('kegiatan.ibadah-raya')],
-                ['label' => 'Doa Bersama', 'href' => route('kegiatan.doa-bersama'), 'active' => request()->routeIs('kegiatan.doa-bersama')],
-                ['label' => 'Sekolah Minggu', 'href' => route('kegiatan.sekolah-minggu'), 'active' => request()->routeIs('kegiatan.sekolah-minggu')],
-                ['label' => 'Persekutuan Wilayah', 'href' => route('kegiatan.persekutuan-wilayah'), 'active' => request()->routeIs('kegiatan.persekutuan-wilayah')],
+                ['label' => 'Pelayanan', 'href' => route('kegiatan.pelayanan'), 'active' => request()->routeIs('kegiatan.pelayanan')],
+                ['label' => 'Komsel', 'href' => route('kegiatan.komsel'), 'active' => request()->routeIs('kegiatan.komsel')],
+                ['label' => 'Retret/Camp 12', 'href' => route('kegiatan.retret-camp'), 'active' => request()->routeIs('kegiatan.retret-camp')],
             ],
         ],
         ['label' => 'Berita', 'href' => route('berita'), 'active' => request()->routeIs('berita*')],
