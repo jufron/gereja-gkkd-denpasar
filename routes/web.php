@@ -4,8 +4,7 @@ use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(PagesController::class)->group(function () {
-    Route::get('/', 'index')->name('welcome');
-    Route::get('home', 'index')->name('home');
+    Route::get('/', 'index')->name('home');
     Route::get('tentang', 'tentang')->name('tentang');
     Route::get('berita', 'berita')->name('berita');
     Route::get('galeri', 'galeri')->name('galeri');
@@ -19,3 +18,13 @@ Route::controller(PagesController::class)->group(function () {
         Route::get('khotbah/{slug}', 'khotbahShow')->name('khotbah.show');
     });
 });
+
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+require __DIR__.'/auth.php';
