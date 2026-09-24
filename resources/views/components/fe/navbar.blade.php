@@ -26,6 +26,14 @@
     // Auth belum terpasang; tombol otomatis memakai route login begitu tersedia.
     $loginUrl = Route::has('login') ? route('login') : '#';
 
+    $user = auth()->user();
+
+    $initials = collect(explode(' ', trim($user?->name ?? '')))
+        ->filter()
+        ->map(fn ($word) => strtoupper(substr($word, 0, 1)))
+        ->take(2)
+        ->implode('');
+
     $linkBase = 'rounded-full px-3.5 py-2 text-sm font-medium transition-colors hover:text-accent dark:hover:text-accent-soft';
     $activeClass = 'bg-accent/10 font-semibold text-accent dark:bg-accent/20 dark:text-accent-soft';
     $inactiveClass = 'text-ink/70 hover:bg-ink/5 dark:text-muted';
@@ -168,12 +176,75 @@
                 </div>
 
                 {{-- Tombol Masuk (desktop) --}}
-                <a
-                    href="{{ $loginUrl }}"
-                    class="hidden rounded-full bg-accent px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-strong lg:inline-flex {{ $focusRing }}"
-                >
-                    Masuk
-                </a>
+                @auth
+                    {{-- Dropdown user (desktop) --}}
+                    <div class="relative hidden lg:block" x-data="{ open: false }" @keydown.escape.window="open = false">
+                        <button
+                            type="button"
+                            @click="open = !open"
+                            :aria-expanded="open"
+                            aria-haspopup="menu"
+                            class="inline-flex h-10 items-center gap-2 rounded-full pl-1.5 pr-2.5 text-ink transition-colors hover:bg-ink/5 {{ $focusRing }}"
+                        >
+                            <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-accent-strong to-accent text-[11px] font-bold text-white">
+                                {{ $initials }}
+                            </span>
+                            <span class="max-w-[8rem] truncate text-sm font-medium">{{ $user->name }}</span>
+                            <svg class="h-4 w-4 text-muted transition-transform duration-200 motion-reduce:transition-none" :class="open && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+
+                        <div
+                            x-show="open"
+                            x-cloak
+                            @click.outside="open = false"
+                            x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+                            x-transition:enter-start="opacity-0 -translate-y-1 scale-95"
+                            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                            x-transition:leave="transition ease-in duration-150 motion-reduce:transition-none"
+                            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                            x-transition:leave-end="opacity-0 -translate-y-1 scale-95"
+                            role="menu"
+                            class="absolute top-full right-0 z-50 mt-2 w-56 origin-top-right"
+                        >
+                            <div class="glass-nav rounded-2xl p-2">
+                                <div class="border-b border-line px-3 py-2">
+                                    <p class="truncate text-xs font-semibold text-ink">{{ $user->name }}</p>
+                                    <p class="truncate text-[11px] text-muted">{{ $user->email }}</p>
+                                </div>
+                                <a
+                                    href="{{ route('dashboard') }}"
+                                    role="menuitem"
+                                    class="mt-1 flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-accent/10 hover:text-accent dark:hover:text-accent-soft {{ $focusRing }}"
+                                >
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v7.5h7.5V3M12.75 12v9h7.5v-9M3.75 21h7.5v-4.5h-7.5V21Z" />
+                                    </svg>
+                                    Dashboard
+                                </a>
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    @click="open = false; $dispatch('open-modal', 'confirm-logout')"
+                                    class="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-danger transition-colors hover:bg-danger/10 {{ $focusRing }}"
+                                >
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0 3-3m-3 3V5.25" />
+                                    </svg>
+                                    Keluar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <a
+                        href="{{ $loginUrl }}"
+                        class="hidden rounded-full bg-accent px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-strong lg:inline-flex {{ $focusRing }}"
+                    >
+                        Masuk
+                    </a>
+                @endauth
 
                 {{-- Hamburger (mobile) --}}
                 <button
@@ -293,12 +364,41 @@
     </nav>
 
     <div class="border-t border-line p-4">
-        <a
-            href="{{ $loginUrl }}"
-            @click="$store.nav.open = false"
-            class="block rounded-full bg-accent px-5 py-2.5 text-center text-base font-medium text-white transition-colors hover:bg-accent-strong {{ $focusRing }}"
-        >
-            Masuk
-        </a>
+        @auth
+            <div class="mb-3 flex items-center gap-3">
+                <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-accent-strong to-accent text-xs font-bold text-white">
+                    {{ $initials }}
+                </span>
+                <div class="min-w-0">
+                    <p class="truncate text-sm font-semibold text-ink">{{ $user->name }}</p>
+                    <p class="truncate text-[11px] text-muted">{{ $user->email }}</p>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <a
+                    href="{{ route('dashboard') }}"
+                    @click="$store.nav.open = false"
+                    class="flex items-center justify-center gap-2 rounded-full border border-line px-5 py-2.5 text-base font-medium text-ink transition-colors hover:border-accent hover:text-accent {{ $focusRing }}"
+                >
+                    Dashboard
+                </a>
+                <button
+                    type="button"
+                    @click="$store.nav.open = false; $dispatch('open-modal', 'confirm-logout')"
+                    class="flex w-full items-center justify-center gap-2 rounded-full bg-danger px-5 py-2.5 text-base font-medium text-white transition-colors hover:brightness-92 {{ $focusRing }}"
+                >
+                    Keluar
+                </button>
+            </div>
+        @else
+            <a
+                href="{{ $loginUrl }}"
+                @click="$store.nav.open = false"
+                class="block rounded-full bg-accent px-5 py-2.5 text-center text-base font-medium text-white transition-colors hover:bg-accent-strong {{ $focusRing }}"
+            >
+                Masuk
+            </a>
+        @endauth
     </div>
 </aside>

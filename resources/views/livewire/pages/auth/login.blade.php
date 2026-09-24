@@ -25,47 +25,84 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="mb-5" :status="session('status')" />
 
-    <form wire:submit="login">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
-        </div>
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold tracking-tight">Selamat datang kembali</h1>
+        <p class="mt-1.5 text-sm text-muted">Masuk untuk mengelola pelayanan GKKD Denpasar.</p>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <form wire:submit="login" class="space-y-5">
+        {{-- Email --}}
+        <x-be.field label="Email" for="email">
+            <x-text-input wire:model="form.email" id="email" type="email" name="email" required autofocus autocomplete="username" placeholder="nama@gkkdbali.org" />
+            <x-input-error :messages="$errors->get('form.email')" />
+        </x-be.field>
 
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+        {{-- Password --}}
+        <x-be.field label="Kata Sandi" for="password">
+            <x-input-password wire:model="form.password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••" />
+            <x-input-error :messages="$errors->get('form.password')" />
+        </x-be.field>
 
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+        {{-- Remember me --}}
+        <div class="flex items-center justify-between">
+            <label for="remember" class="inline-flex items-center gap-2 text-sm text-muted">
+                <input
+                    wire:model="form.remember"
+                    id="remember"
+                    type="checkbox"
+                    class="h-4 w-4 rounded border-line-strong text-accent focus:ring-accent"
+                    name="remember"
+                >
+                Ingat saya
             </label>
-        </div>
 
-        <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
+                <a
+                    href="{{ route('password.request') }}"
+                    wire:navigate
+                    class="text-sm font-medium text-accent transition-colors hover:text-accent-strong"
+                >
+                    Lupa kata sandi?
                 </a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
+
+        <x-primary-button>
+            Masuk
+        </x-primary-button>
+
+        {{-- Divider --}}
+        <div class="flex items-center gap-4">
+            <span class="h-px flex-1 bg-line"></span>
+            <span class="text-xs font-medium text-muted">atau</span>
+            <span class="h-px flex-1 bg-line"></span>
+        </div>
+
+        {{-- ponytail: tombol UI-only. Arahkan ke route OAuth (Socialite) saat kredensial tersedia. --}}
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <a
+                href="#"
+                class="flex items-center justify-center gap-2.5 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-strong hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            >
+                <i class="fa-brands fa-facebook text-base text-[#1877f2]"></i>
+                Facebook
+            </a>
+            <a
+                href="#"
+                class="flex items-center justify-center gap-2.5 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-strong hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            >
+                <i class="fa-brands fa-google text-base"></i>
+                Google
+            </a>
+        </div>
+
+        <p class="text-center text-sm text-muted">
+            Belum punya akun?
+            <a href="{{ route('register') }}" wire:navigate class="font-medium text-accent transition-colors hover:text-accent-strong">
+                Daftar
+            </a>
+        </p>
     </form>
 </div>

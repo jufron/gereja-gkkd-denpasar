@@ -39,6 +39,8 @@
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
         @stack('head')
+
+        @livewireStyles
     </head>
     <body class="min-h-screen bg-surface font-sans text-ink antialiased">
         <div id="top-sentinel" aria-hidden="true" class="absolute top-0 left-0 h-px w-full"></div>
@@ -52,6 +54,8 @@
 
         <x-fe.navbar />
 
+        <x-logout-modal />
+
         <main id="main">
             {{ $slot }}
         </main>
@@ -62,5 +66,7 @@
         <x-fe.back-to-top />
 
         @stack('scripts')
+
+        @livewireScripts
     </body>
 </html>

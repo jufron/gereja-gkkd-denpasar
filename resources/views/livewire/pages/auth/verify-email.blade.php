@@ -36,23 +36,31 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold tracking-tight">Verifikasi email</h1>
+        <p class="mt-1.5 text-sm text-muted">
+            Terima kasih telah mendaftar. Sebelum memulai, verifikasi alamat email Anda dengan mengeklik tautan yang baru saja kami kirim. Jika email tidak diterima, kami dengan senang hati mengirimkannya kembali.
+        </p>
     </div>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+        <div class="mb-5 flex items-center gap-2 rounded-xl border border-success/25 bg-success-soft px-3.5 py-2.5 text-sm font-medium text-success">
+            <i class="fa-solid fa-circle-check text-xs"></i>
+            Tautan verifikasi baru telah dikirim ke email yang Anda daftarkan.
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
+    <div class="space-y-5">
         <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
+            Kirim ulang email verifikasi
         </x-primary-button>
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-            {{ __('Log Out') }}
+        <button
+            wire:click="logout"
+            type="submit"
+            class="block w-full text-center text-sm font-medium text-muted transition-colors hover:text-ink"
+        >
+            Keluar
         </button>
     </div>
 </div>

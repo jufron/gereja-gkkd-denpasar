@@ -70,36 +70,32 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <form wire:submit="resetPassword">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold tracking-tight">Kata sandi baru</h1>
+        <p class="mt-1.5 text-sm text-muted">Buat kata sandi baru untuk akun Anda.</p>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <form wire:submit="resetPassword" class="space-y-5">
+        {{-- Email --}}
+        <x-be.field label="Email" for="email">
+            <x-text-input wire:model="email" id="email" type="email" name="email" required autofocus autocomplete="username" placeholder="nama@gkkdbali.org" />
+            <x-input-error :messages="$errors->get('email')" />
+        </x-be.field>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        {{-- Password --}}
+        <x-be.field label="Kata Sandi Baru" for="password">
+            <x-input-password wire:model="password" id="password" name="password" required autocomplete="new-password" placeholder="••••••••" />
+            <x-input-error :messages="$errors->get('password')" />
+        </x-be.field>
 
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                          type="password"
-                          name="password_confirmation" required autocomplete="new-password" />
+        {{-- Confirm Password --}}
+        <x-be.field label="Konfirmasi Kata Sandi" for="password_confirmation">
+            <x-input-password wire:model="password_confirmation" id="password_confirmation" name="password_confirmation" required autocomplete="new-password" placeholder="••••••••" />
+            <x-input-error :messages="$errors->get('password_confirmation')" />
+        </x-be.field>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
+        <x-primary-button>
+            Simpan kata sandi
+        </x-primary-button>
     </form>
 </div>

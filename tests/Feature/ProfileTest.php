@@ -17,11 +17,11 @@ class ProfileTest extends TestCase
 
         $response = $this->actingAs($user)->get('/profile');
 
+        // /profile merender dashboard.profile (UI statis), bukan form Livewire Breeze.
         $response
             ->assertOk()
-            ->assertSeeVolt('profile.update-profile-information-form')
-            ->assertSeeVolt('profile.update-password-form')
-            ->assertSeeVolt('profile.delete-user-form');
+            ->assertSee($user->name)
+            ->assertSee($user->email);
     }
 
     public function test_profile_information_can_be_updated(): void

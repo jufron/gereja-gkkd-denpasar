@@ -1,3 +1,399 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/*
+ * Class-based dark mode so the site can offer light / system / dark.
+ * The `.dark` class is set on <html> before paint by the inline script
+ * in components/fe/layout/app.blade.php.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Brand palette follows the 60 / 30 / 10 rule:
+ *   60% surface  #ffffff
+ *   30% ink      #121212
+ *   10% accent   #8a00c2  (from the logo)
+ */
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-surface: #ffffff;
+    --color-ink: #121212;
+    --color-accent: #8a00c2;
+    --color-accent-strong: #6f009e;
+    --color-accent-soft: #c77dff;
+    --color-line: #e5e5e5;
+    --color-muted: #5c5c5c;
+    --color-shadow: #121212;
+
+    /* Backend dashboard palette (split from dashboard/blank.blade.php). */
+    --color-brand-50: #fbf3ff;
+    --color-brand-100: #f6e5ff;
+    --color-brand-200: #edd0ff;
+    --color-brand-500: #b833ee;
+    --color-brand-600: #8a00c2;
+    --color-brand-700: #7500a8;
+    --color-brand-800: #61028a;
+    --color-brand-900: #4e066e;
+    --color-darkbase: #121212;
+
+    /*
+     * Dashboard surface tokens. The canvas is the app background, card the
+     * elevated surface, sidebar the always-dark navigation rail.
+     * Shape consistency lock: inputs/buttons rounded-xl, cards rounded-2xl,
+     * pills rounded-full. Mixed systems are not allowed.
+     */
+    --color-canvas: #f4f4f5;
+    --color-card: #ffffff;
+    --color-sidebar: #121212;
+    --color-line-strong: #d4d4d8;
+
+    /* Desaturated status colors (60/30/10 rule keeps them as accents only). */
+    --color-success: #15803d;
+    --color-success-soft: #ecfdf5;
+    --color-warning: #b45309;
+    --color-warning-soft: #fffbeb;
+    --color-danger: #be123c;
+    --color-danger-soft: #fff1f2;
+}
+
+@layer base {
+    :root {
+        color-scheme: light;
+    }
+
+    .dark {
+        color-scheme: dark;
+
+        --color-surface: #121212;
+        --color-ink: #f5f5f5;
+        --color-line: #2a2a2a;
+        --color-muted: #a3a3a3;
+        --color-shadow: #000000;
+
+        --color-canvas: #0a0a0b;
+        --color-card: #18181b;
+        --color-sidebar: #0d0d0f;
+        --color-line-strong: #27272a;
+
+        --color-success: #34d399;
+        --color-success-soft: #052e1d;
+        --color-warning: #fbbf24;
+        --color-warning-soft: #2a1c07;
+        --color-danger: #fb7185;
+        --color-danger-soft: #2a0d16;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+
+    body {
+        background-color: var(--color-surface);
+        color: var(--color-ink);
+    }
+
+    /* Custom scrollbar used by the backend dashboard. */
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    /* Hide Alpine-controlled elements until Alpine has initialized. */
+    [x-cloak] {
+        display: none !important;
+    }
+
+    /*
+     * Applied only while the theme switches so the color change eases in
+     * instead of snapping. Removed shortly after by the theme controller.
+     */
+    .theme-transition,
+    .theme-transition *,
+    .theme-transition *::before,
+    .theme-transition *::after {
+        transition:
+            background-color 300ms ease,
+            border-color 300ms ease,
+            color 300ms ease,
+            fill 300ms ease,
+            stroke 300ms ease,
+            box-shadow 300ms ease !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .theme-transition,
+        .theme-transition *,
+        .theme-transition *::before,
+        .theme-transition *::after {
+            transition: none !important;
+        }
+    }
+}
+
+@layer components {
+    /*
+     * iOS-style translucent material used by the floating navbar and
+     * dropdown panels. Falls back to a solid surface when backdrop-filter
+     * is unsupported or the user asks for reduced transparency.
+     */
+    .glass-nav {
+        background-color: color-mix(in srgb, var(--color-surface) 62%, transparent);
+        -webkit-backdrop-filter: blur(20px) saturate(1.6);
+        backdrop-filter: blur(20px) saturate(1.6);
+        border: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, #ffffff 40%, transparent),
+            0 6px 24px -12px color-mix(in srgb, var(--color-shadow) 35%, transparent);
+        transition:
+            background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-nav.is-scrolled {
+        background-color: color-mix(in srgb, var(--color-surface) 82%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, #ffffff 30%, transparent),
+            0 12px 40px -16px color-mix(in srgb, var(--color-shadow) 45%, transparent);
+    }
+
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+        .glass-nav,
+        .glass-nav.is-scrolled {
+            background-color: var(--color-surface);
+        }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+        .glass-nav,
+        .glass-nav.is-scrolled {
+            background-color: var(--color-surface);
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .glass-nav {
+            transition: none;
+        }
+    }
+
+    /*
+     * Navbar shell has two states:
+     *   - at the top: flat, full-width, no background/border/shadow
+     *   - once scrolled: floating "island" with a translucent material
+     * The border is intentionally omitted from the island state.
+     */
+    [data-navbar] {
+        padding: 0.5rem 0 0;
+        transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-navbar].is-scrolled {
+        padding: 0.75rem 0.75rem 0;
+    }
+
+    @media (min-width: 640px) {
+        [data-navbar].is-scrolled {
+            padding: 0.75rem 1rem 0;
+        }
+    }
+
+    .nav-shell {
+        background-color: transparent;
+        border: 0;
+        border-radius: 0;
+        max-width: 100%;
+        margin-inline: auto;
+        padding-block: 0;
+        transition:
+            background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+            border-radius 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+            max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+            padding-block 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-navbar].is-scrolled .nav-shell {
+        background-color: color-mix(in srgb, var(--color-surface) 78%, transparent);
+        -webkit-backdrop-filter: blur(20px) saturate(1.6);
+        backdrop-filter: blur(20px) saturate(1.6);
+        border-radius: 1.25rem;
+        max-width: 80rem;
+        padding-block: 0.5rem;
+        box-shadow: 0 12px 40px -16px color-mix(in srgb, var(--color-shadow) 45%, transparent);
+    }
+
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+        [data-navbar].is-scrolled .nav-shell {
+            background-color: var(--color-surface);
+        }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+        [data-navbar].is-scrolled .nav-shell {
+            background-color: var(--color-surface);
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        [data-navbar],
+        .nav-shell {
+            transition: none;
+        }
+    }
+
+    /*
+     * Dashboard primitives. Kept as classes (not Blade components) because the
+     * backend pages compose them inline; the anonymous x-be.* components below
+     * are the preferred entry point and use these same rules.
+     */
+    .be-card {
+        background-color: var(--color-card);
+        border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+        border-radius: 1rem;
+        box-shadow: 0 1px 2px -1px color-mix(in srgb, var(--color-shadow) 18%, transparent);
+    }
+
+    .be-input {
+        width: 100%;
+        height: 2.75rem;
+        padding-inline: 0.875rem;
+        border-radius: 0.75rem;
+        background-color: color-mix(in srgb, var(--color-ink) 4%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+        color: var(--color-ink);
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .be-input::placeholder {
+        color: color-mix(in srgb, var(--color-ink) 38%, transparent);
+    }
+
+    .be-input:focus {
+        outline: none;
+        background-color: var(--color-card);
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 22%, transparent);
+    }
+
+    .be-label {
+        display: block;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    }
+
+    .be-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 2.5rem;
+        padding-inline: 1.25rem;
+        border-radius: 0.75rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    }
+
+    .be-btn:active {
+        transform: translateY(-1px);
+    }
+
+    .be-btn-primary {
+        background-color: var(--color-accent);
+        color: #ffffff;
+        box-shadow: 0 1px 3px -1px color-mix(in srgb, var(--color-accent) 55%, transparent);
+    }
+
+    .be-btn-primary:hover {
+        background-color: var(--color-accent-strong);
+    }
+
+    .be-btn-ghost {
+        background-color: color-mix(in srgb, var(--color-ink) 5%, transparent);
+        color: var(--color-ink);
+    }
+
+    .be-btn-ghost:hover {
+        background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+    }
+
+    .be-btn-danger {
+        background-color: var(--color-danger);
+        color: #ffffff;
+    }
+
+    .be-btn-danger:hover {
+        filter: brightness(0.92);
+    }
+
+    .be-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.125rem 0.625rem;
+        border-radius: 9999px;
+        font-size: 0.625rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    .be-switch {
+        position: relative;
+        display: inline-flex;
+        height: 1.5rem;
+        width: 2.75rem;
+        flex-shrink: 0;
+        cursor: pointer;
+        border-radius: 9999px;
+        transition: background-color 0.2s ease;
+    }
+
+    .be-switch::after {
+        content: "";
+        position: absolute;
+        top: 0.125rem;
+        left: 0.125rem;
+        height: 1.25rem;
+        width: 1.25rem;
+        border-radius: 9999px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .be-switch[aria-checked="true"]::after {
+        transform: translateX(1.25rem);
+    }
+}

@@ -37,52 +37,70 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <form wire:submit="register">
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold tracking-tight">Buat akun baru</h1>
+        <p class="mt-1.5 text-sm text-muted">Daftar untuk mulai mengelola pelayanan GKKD Denpasar.</p>
+    </div>
+
+    <form wire:submit="register" class="space-y-5">
+        {{-- Name --}}
+        <x-be.field label="Nama Lengkap" for="name">
+            <x-text-input wire:model="name" id="name" type="text" name="name" required autofocus autocomplete="name" placeholder="Nama lengkap Anda" />
+            <x-input-error :messages="$errors->get('name')" />
+        </x-be.field>
+
+        {{-- Email --}}
+        <x-be.field label="Email" for="email">
+            <x-text-input wire:model="email" id="email" type="email" name="email" required autocomplete="username" placeholder="nama@gkkdbali.org" />
+            <x-input-error :messages="$errors->get('email')" />
+        </x-be.field>
+
+        {{-- Password --}}
+        <x-be.field label="Kata Sandi" for="password">
+            <x-input-password wire:model="password" id="password" name="password" required autocomplete="new-password" placeholder="••••••••" />
+            <x-input-error :messages="$errors->get('password')" />
+        </x-be.field>
+
+        {{-- Confirm Password --}}
+        <x-be.field label="Konfirmasi Kata Sandi" for="password_confirmation">
+            <x-input-password wire:model="password_confirmation" id="password_confirmation" name="password_confirmation" required autocomplete="new-password" placeholder="••••••••" />
+            <x-input-error :messages="$errors->get('password_confirmation')" />
+        </x-be.field>
+
+        <x-primary-button>
+            Daftar
+        </x-primary-button>
+
+        {{-- Divider --}}
+        <div class="flex items-center gap-4">
+            <span class="h-px flex-1 bg-line"></span>
+            <span class="text-xs font-medium text-muted">atau</span>
+            <span class="h-px flex-1 bg-line"></span>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
+        {{-- ponytail: tombol UI-only. Arahkan ke route OAuth (Socialite) saat kredensial tersedia. --}}
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <a
+                href="#"
+                class="flex items-center justify-center gap-2.5 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-strong hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            >
+                <i class="fa-brands fa-facebook text-base text-[#1877f2]"></i>
+                Facebook
             </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+            <a
+                href="#"
+                class="flex items-center justify-center gap-2.5 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-strong hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            >
+                <i class="fa-brands fa-google text-base"></i>
+                Google
+            </a>
         </div>
+
+        <p class="text-center text-sm text-muted">
+            Sudah punya akun?
+            <a href="{{ route('login') }}" wire:navigate class="font-medium text-accent transition-colors hover:text-accent-strong">
+                Masuk
+            </a>
+        </p>
     </form>
 </div>

@@ -1,4 +1,4 @@
-import Alpine from 'alpinejs';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const root = document.documentElement;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,7 +26,7 @@ const applyTheme = (theme) => {
     root.classList.toggle('dark', resolveTheme(theme) === 'dark');
     root.dataset.theme = theme;
 
-    const store = Alpine.store('theme');
+    const store = window.Alpine?.store('theme');
 
     if (store) {
         store.current = theme;
@@ -51,19 +51,21 @@ const setTheme = (theme) => {
 
 /* ---------------------------------------------------------------------------
  * Alpine stores: shared state for the theme dropdown and the mobile drawer.
+ * Registered on 'alpine:init' so they always attach to whatever Alpine the
+ * page provides (Livewire's) instead of a separately bundled copy.
  * ------------------------------------------------------------------------- */
-Alpine.store('theme', {
-    current: getStoredTheme(),
-    set(value) {
-        setTheme(value);
-    },
-});
+document.addEventListener('alpine:init', () => {
+    window.Alpine.store('theme', {
+        current: getStoredTheme(),
+        set(value) {
+            setTheme(value);
+        },
+    });
 
-Alpine.store('nav', {
-    open: false,
+    window.Alpine.store('nav', {
+        open: false,
+    });
 });
-
-Alpine.start();
 
 systemTheme.addEventListener('change', () => {
     if (getStoredTheme() === 'system') {
