@@ -22,8 +22,8 @@
         [
             'label' => 'User Management',
             'items' => [
-                ['label' => 'All User', 'route' => null, 'icon' => 'fa-users'],
-                ['label' => 'Hak Akses', 'route' => null, 'icon' => 'fa-user-shield'],
+                ['label' => 'All User', 'route' => 'all-user', 'icon' => 'fa-users'],
+                ['label' => 'Hak Akses', 'route' => 'hak-akses', 'icon' => 'fa-user-shield'],
             ],
         ],
         [

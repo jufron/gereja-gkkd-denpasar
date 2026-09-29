@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(PagesController::class)->group(function () {
@@ -45,6 +46,14 @@ Route::get('profile/keamanan', fn () => view('dashboard.security', [
 Route::view('pengaturan', 'dashboard.pengaturan')
     ->middleware(['auth'])
     ->name('pengaturan');
+
+Route::view('hak-akses', 'dashboard.hak-akses')
+    ->middleware(['auth', 'role:Administrator'])
+    ->name('hak-akses');
+
+Route::get('all-user', [UserController::class, 'index'])
+    ->middleware(['auth', 'role:Administrator'])
+    ->name('all-user');
 
 Route::get('log-aktivitas', [ActivityLogController::class, 'index'])
     ->middleware(['auth'])

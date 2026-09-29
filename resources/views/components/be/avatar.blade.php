@@ -2,6 +2,7 @@
     'src' => null,
     'alt' => null,
     'size' => 'md',
+    'name' => null,
 ])
 
 @php
@@ -11,7 +12,7 @@
         'lg' => 'h-20 w-20 text-2xl',
     ];
 
-    $initials = collect(explode(' ', trim(auth()->user()?->name ?? '')))
+    $initials = collect(explode(' ', trim($name ?? auth()->user()?->name ?? '')))
         ->filter()
         ->map(fn ($word) => strtoupper(substr($word, 0, 1)))
         ->take(2)
