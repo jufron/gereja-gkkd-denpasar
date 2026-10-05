@@ -1,0 +1,3 @@
+gkkd-denpasar.org {
+    reverse_proxy laravel.test:80
+}
