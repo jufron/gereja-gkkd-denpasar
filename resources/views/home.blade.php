@@ -1,130 +1,3 @@
-@php
-    // TODO: ganti dengan nomor WhatsApp gereja (format internasional tanpa "+").
-    $whatsappNumber = '6281234567890';
-    $whatsappMessage = rawurlencode('Shalom, saya ingin bertanya tentang GKKD Denpasar.');
-
-    // Kegiatan & pertemuan jemaat.
-    $schedules = [
-        [
-            'title' => 'Pelayanan',
-            'time' => 'Bersamaan dengan Ibadah',
-            'day' => 'Minggu',
-            'badge' => 'Tim Pelayanan',
-            'desc' => 'Ragam tim pelayanan gereja: musik, multimedia, diakonia, doa, anak, dan generasi muda.',
-            'link' => route('kegiatan.pelayanan'),
-        ],
-        [
-            'title' => 'Komsel',
-            'time' => 'Pukul 19.30 WITA',
-            'day' => 'Kamis / Jumat',
-            'badge' => 'Komunitas Sel',
-            'desc' => 'Kelompok kecil di rumah-rumah jemaat di Renon, Sanur, Denpasar Barat, dan Badung untuk saling peduli.',
-            'link' => route('kegiatan.komsel'),
-        ],
-        [
-            'title' => 'Retret / Camp',
-            'time' => 'Tahunan',
-            'day' => 'Sep / Des',
-            'badge' => 'Keluarga & Pemuda',
-            'desc' => 'Retret keluarga, camp pemuda, dan camp anak tahunan untuk pembaharuan iman dan relasi.',
-            'link' => route('kegiatan.retret-camp'),
-        ],
-    ];
-
-    // Ringkasan pengumuman terbaru gereja.
-    $announcements = [
-        [
-            'date' => '28 Sep 2026',
-            'tag' => 'Sakramen',
-            'title' => 'Pendaftaran Baptisan Kudus & Penyerahan Anak',
-            'summary' => 'Bagi jemaat yang rindu menerima baptisan selam atau menyerahkan anak, kelas pembekalan dibuka mulai Minggu depan.',
-            'badge_color' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-        ],
-        [
-            'date' => '26 Sep 2026',
-            'tag' => 'Pelayanan',
-            'title' => 'Pertemuan Tim Multimedia & Pelayan Musik',
-            'summary' => 'Workshop audio-visual dan pengenalan alur ibadah baru bersama seluruh tim pelayan hari Sabtu pukul 16.00 WITA.',
-            'badge_color' => 'bg-accent/10 text-accent dark:text-accent-soft',
-        ],
-        [
-            'date' => '04 Okt 2026',
-            'tag' => 'Aksi Kasih',
-            'title' => 'Bakti Sosial & Donor Darah Kasih',
-            'summary' => 'Bekerja sama dengan PMI Kota Denpasar bertempat di aula serbaguna gereja. Terbuka bagi jemaat dan masyarakat umum.',
-            'badge_color' => 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
-        ],
-        [
-            'date' => '11 Okt 2026',
-            'tag' => 'Komunitas',
-            'title' => 'Retreat Pemuda & Profesional Muda 2026',
-            'summary' => 'Pendaftaran awal dibuka untuk retreat tahunan di Bedugul dengan tema "Berakar dan Berbuah di Era Digital".',
-            'badge_color' => 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-        ],
-    ];
-
-    // Ringkasan berita terkini.
-    $latestNews = [
-        [
-            'title' => 'Menghadirkan Damai Kristus di Tengah Dinamika Kota Denpasar',
-            'date' => '20 September 2026',
-            'category' => 'Khotbah & Renungan',
-            'image' => asset('images/church-sanctuary.jpg'),
-            'summary' => 'Refleksi mendalam mengenai panggilan jemaat untuk hidup sebagai pembawa damai dan teladan di tempat kerja.',
-            'read_time' => '4 Menit Baca',
-            'link' => route('berita'),
-        ],
-        [
-            'title' => 'Laporan Aksi Kasih: Penyaluran Paket Sembako & Perlengkapan Belajar',
-            'date' => '15 September 2026',
-            'category' => 'Bakti Sosial',
-            'image' => asset('images/outreach.jpg'),
-            'summary' => 'Sebanyak 120 paket perlengkapan sekolah dan kebutuhan pokok telah disalurkan bagi keluarga prasejahtera di Denpasar.',
-            'read_time' => '3 Menit Baca',
-            'link' => route('berita'),
-        ],
-        [
-            'title' => 'Keceriaan Anak-Anak di Kelas Karakter Sekolah Minggu',
-            'date' => '10 September 2026',
-            'category' => 'Sekolah Minggu',
-            'image' => asset('images/sunday-school.jpg'),
-            'summary' => 'Mengenalkan benih firman Tuhan sejak dini melalui metode mendongeng, kreativitas tangan, dan lagu gerak tari.',
-            'read_time' => '3 Menit Baca',
-            'link' => route('berita'),
-        ],
-    ];
-
-    // Banner dinamis untuk hero slider.
-    $heroBanners = [
-        [
-            'image' => asset('images/church-sanctuary.jpg'),
-            'alt' => 'Ruang Ibadah GKKD Denpasar',
-            'badge' => 'Sanctuary GKKD Denpasar',
-            'caption' => 'Suasana ibadah hangat, intim, dan bersahabat',
-        ],
-        [
-            'image' => asset('images/fellowship.jpg'),
-            'alt' => 'Komunitas & Persekutuan Jemaat GKKD Denpasar',
-            'badge' => 'Komunitas Kasih',
-            'caption' => 'Bertumbuh bersama dalam doa dan keakraban keluarga',
-        ],
-        [
-            'image' => asset('images/sunday-school.jpg'),
-            'alt' => 'Kelas Anak Sekolah Minggu GKKD Denpasar',
-            'badge' => 'Sekolah Minggu Ceria',
-            'caption' => 'Pendidikan karakter Alkitab yang interaktif dan ramah anak',
-        ],
-        [
-            'image' => asset('images/outreach.jpg'),
-            'alt' => 'Aksi Kasih Pelayanan Masyarakat Bali',
-            'badge' => 'Aksi Kasih di Bali',
-            'caption' => 'Melayani sesama dengan kepedulian yang tulus',
-        ],
-    ];
-
-    $focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface';
-@endphp
-
 <x-fe.layout.app
     title="GKKD Denpasar — Gereja Kristen Kemuliaan Allah"
     description="GKKD Denpasar adalah keluarga rohani yang bertumbuh dalam iman dan melayani kota Denpasar, Bali."
@@ -381,14 +254,14 @@
                     {{-- Foto Pendeta / Cover (Kiri) --}}
                     <div class="relative h-64 w-full shrink-0 overflow-hidden bg-ink/5 sm:h-72 lg:h-auto lg:w-80 xl:w-96">
                         <img
-                            src="https://picsum.photos/seed/pastor-samuel/600/600"
-                            alt="Foto Pdt. Samuel Wijaya"
+                            src="{{ $featuredSermon['image'] }}"
+                            alt="{{ $featuredSermon['image_alt'] }}"
                             loading="lazy"
                             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         >
                         <div class="absolute top-4 left-4">
                             <span class="rounded-full bg-accent/90 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-xs">
-                                Utama minggu ini
+                                {{ $featuredSermon['label'] }}
                             </span>
                         </div>
                     </div>
@@ -398,35 +271,35 @@
                         <div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent dark:text-accent-soft">
-                                    Ibadah Raya Minggu Pagi
+                                    {{ $featuredSermon['category'] }}
                                 </span>
-                                <span class="text-xs text-muted">Minggu, 21 September 2025 &bull; 09.00 WITA</span>
+                                <span class="text-xs text-muted">{{ $featuredSermon['date'] }}</span>
                             </div>
 
                             <h3 class="mt-3 text-2xl font-bold leading-tight text-ink sm:text-3xl">
-                                Hidup dalam Kasih Karunia yang Cukup
+                                {{ $featuredSermon['title'] }}
                             </h3>
 
                             <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-ink">
-                                <span>Pdt. Samuel Wijaya</span>
+                                <span>{{ $featuredSermon['preacher'] }}</span>
                                 <span class="text-line" aria-hidden="true">&bull;</span>
                                 <span class="inline-flex items-center gap-1.5 text-accent dark:text-accent-soft font-semibold">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4 shrink-0" aria-hidden="true">
                                         <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687ZM7.5 14.055c-.935-.531-2.12-.603-3.213-.492-1.18.117-2.37.46-3.287.81V3.58c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v10.523ZM7.5 1.75a.75.75 0 0 1 1.5 0 .75.75 0 0 1-1.5 0Z"/>
                                     </svg>
-                                    2 Korintus 12:7&ndash;10
+                                    {{ $featuredSermon['verse'] }}
                                 </span>
                             </div>
 
                             <p class="mt-4 text-base leading-relaxed text-muted">
-                                Paulus mengajarkan bahwa kelemahan bukan penghalang, melainkan ruang di mana kuasa Kristus dinyatakan dengan nyata. Kasih karunia Tuhan selalu cukup untuk menanggung setiap beban kehidupan kita sehari-hari.
+                                {{ $featuredSermon['excerpt'] }}
                             </p>
                         </div>
 
                         {{-- Action Buttons --}}
                         <div class="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-6">
                             <a
-                                href="{{ route('kegiatan.khotbah.show', 'hidup-dalam-kasih-karunia-yang-cukup') }}"
+                                href="{{ $featuredSermon['detail_url'] }}"
                                 class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
                             >
                                 <span>Lihat Detail Khotbah</span>
@@ -577,21 +450,18 @@
 
     {{-- Section: Kalender Event & Agenda Gereja (FlyonUI / FullCalendar Layout) --}}
     <section class="border-t border-line py-16 lg:py-20" x-data="{
+        calendarEvents: @json($calendarEvents),
+        calendarInitialDate: @json($calendarInitialDate),
         initFullCalendar() {
             if (typeof FullCalendar !== 'undefined' && this.$refs.calendarEl) {
                 const calendar = new FullCalendar.Calendar(this.$refs.calendarEl, {
                     initialView: 'dayGridMonth',
-                    initialDate: '2026-10-01',
+                    initialDate: this.calendarInitialDate,
                     headerToolbar: {
                         left: 'title',
                         right: 'prev,next today'
                     },
-                    events: [
-                        { id: '1', title: 'Bakti Sosial & Donor Darah', start: '2026-10-04', color: '#e11d48' },
-                        { id: '2', title: 'Retreat Pemuda Bedugul', start: '2026-10-11', end: '2026-10-14', color: '#2563eb' },
-                        { id: '3', title: 'Lokakarya Musik & Multimedia', start: '2026-10-18', color: '#8a00c2' },
-                        { id: '4', title: 'Baptisan Kudus & Penyerahan Anak', start: '2026-10-25', color: '#059669' }
-                    ],
+                    events: this.calendarEvents,
                     height: 'auto'
                 });
                 calendar.render();
@@ -622,81 +492,28 @@
                     <div class="flex items-center justify-between border-b border-line pb-3">
                         <h3 class="text-base font-bold text-ink">Daftar Event Bulan Ini</h3>
                         <span class="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent dark:text-accent-soft">
-                            Oktober 2026
+                            {{ $calendarMonth }}
                         </span>
                     </div>
 
-                    {{-- Event Item 1 --}}
-                    <div class="flex flex-col justify-between rounded-2xl border border-line bg-surface p-5 transition-all hover:border-accent/40 hover:shadow-sm">
-                        <div class="flex items-start gap-4">
-                            <div class="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-rose-500/10 font-bold text-rose-600 dark:text-rose-400">
-                                <span class="text-[10px] uppercase tracking-wider">OKT</span>
-                                <span class="text-base leading-none">04</span>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <span class="rounded-full bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-                                    Aksi Kasih
-                                </span>
-                                <h4 class="mt-1.5 text-base font-semibold text-ink">Bakti Sosial &amp; Donor Darah Kasih</h4>
-                                <p class="mt-1 text-xs text-muted">Sabtu &bull; 09.00 WITA &bull; Aula Serbaguna</p>
-                                <p class="mt-2 text-xs leading-relaxed text-muted">Bakti sosial donor darah bersama PMI dan penyaluran sembako.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Event Item 2 --}}
-                    <div class="flex flex-col justify-between rounded-2xl border border-line bg-surface p-5 transition-all hover:border-accent/40 hover:shadow-sm">
-                        <div class="flex items-start gap-4">
-                            <div class="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-blue-500/10 font-bold text-blue-600 dark:text-blue-400">
-                                <span class="text-[10px] uppercase tracking-wider">OKT</span>
-                                <span class="text-base leading-none">11</span>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <span class="rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-blue-600 dark:text-blue-400">
-                                    Pemuda &amp; Mahasiswa
-                                </span>
-                                <h4 class="mt-1.5 text-base font-semibold text-ink">Retreat Pemuda &amp; Profesional Muda 2026</h4>
-                                <p class="mt-1 text-xs text-muted">Minggu – Selasa &bull; Villa Bedugul, Bali</p>
-                                <p class="mt-2 text-xs leading-relaxed text-muted">Retreat bertema Berakar dan Berbuah di Era Digital.</p>
+                    @foreach ($monthlyEvents as $event)
+                        <div class="flex flex-col justify-between rounded-2xl border border-line bg-surface p-5 transition-all hover:border-accent/40 hover:shadow-sm">
+                            <div class="flex items-start gap-4">
+                                <div class="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl {{ $event['date_color'] }} font-bold">
+                                    <span class="text-[10px] uppercase tracking-wider">{{ $event['month'] }}</span>
+                                    <span class="text-base leading-none">{{ $event['day'] }}</span>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <span class="rounded-full px-2.5 py-0.5 text-[11px] font-semibold {{ $event['tag_color'] }}">
+                                        {{ $event['tag'] }}
+                                    </span>
+                                    <h4 class="mt-1.5 text-base font-semibold text-ink">{{ $event['title'] }}</h4>
+                                    <p class="mt-1 text-xs text-muted">{{ $event['meta'] }}</p>
+                                    <p class="mt-2 text-xs leading-relaxed text-muted">{{ $event['desc'] }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {{-- Event Item 3 --}}
-                    <div class="flex flex-col justify-between rounded-2xl border border-line bg-surface p-5 transition-all hover:border-accent/40 hover:shadow-sm">
-                        <div class="flex items-start gap-4">
-                            <div class="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-accent/10 font-bold text-accent dark:text-accent-soft">
-                                <span class="text-[10px] uppercase tracking-wider">OKT</span>
-                                <span class="text-base leading-none">18</span>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <span class="rounded-full bg-accent/10 px-2.5 py-0.5 text-[11px] font-semibold text-accent dark:text-accent-soft">
-                                    Pelayanan
-                                </span>
-                                <h4 class="mt-1.5 text-base font-semibold text-ink">Lokakarya Musik &amp; Multimedia Gereja</h4>
-                                <p class="mt-1 text-xs text-muted">Minggu &bull; 14.00 WITA &bull; Ruang Utama</p>
-                                <p class="mt-2 text-xs leading-relaxed text-muted">Pembekalan sound system, live streaming, &amp; worship team.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Event Item 4 --}}
-                    <div class="flex flex-col justify-between rounded-2xl border border-line bg-surface p-5 transition-all hover:border-accent/40 hover:shadow-sm">
-                        <div class="flex items-start gap-4">
-                            <div class="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-emerald-500/10 font-bold text-emerald-600 dark:text-emerald-400">
-                                <span class="text-[10px] uppercase tracking-wider">OKT</span>
-                                <span class="text-base leading-none">25</span>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                    Sakramen
-                                </span>
-                                <h4 class="mt-1.5 text-base font-semibold text-ink">Baptisan Kudus &amp; Penyerahan Anak</h4>
-                                <p class="mt-1 text-xs text-muted">Minggu &bull; 09.00 WITA &bull; Sanctuary Utama</p>
-                                <p class="mt-2 text-xs leading-relaxed text-muted">Pelayanan sakramen baptisan kudus jemaat.</p>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -738,14 +555,14 @@
 
                         <div class="mt-6 rounded-2xl border border-line bg-ink/5 p-5">
                             <div class="flex items-center justify-between">
-                                <span class="text-sm font-bold tracking-wider text-ink">BCA (Bank Central Asia)</span>
-                                <span class="text-xs text-muted">KCP Denpasar</span>
+                                <span class="text-sm font-bold tracking-wider text-ink">{{ $donation['bank_name'] }}</span>
+                                <span class="text-xs text-muted">{{ $donation['bank_branch'] }}</span>
                             </div>
                             <div class="mt-3 flex items-center justify-between">
-                                <span class="font-mono text-2xl font-bold tracking-wider text-ink">146-888-9900</span>
+                                <span class="font-mono text-2xl font-bold tracking-wider text-ink">{{ $donation['account_number'] }}</span>
                                 <button
                                     type="button"
-                                    @click="copyAccount('1468889900')"
+                                    @click="copyAccount('{{ $donation['account_number_raw'] }}')"
                                     class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-ink transition-all hover:border-accent hover:text-accent dark:hover:text-accent-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                                 >
                                     <svg x-show="!copiedBca" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -758,7 +575,7 @@
                                     <span x-text="copiedBca ? 'Tersalin!' : 'Salin Rekening'">Salin Rekening</span>
                                 </button>
                             </div>
-                            <p class="mt-2 text-xs text-muted">Atas Nama: <strong>Gereja Kristen Kemuliaan Allah (GKKD Denpasar)</strong></p>
+                            <p class="mt-2 text-xs text-muted">Atas Nama: <strong>{{ $donation['account_name'] }}</strong></p>
                         </div>
 
                         <div class="mt-6 space-y-2.5 text-xs text-muted">
@@ -775,7 +592,7 @@
 
                     <div class="mt-8 border-t border-line pt-5">
                         <a
-                            href="https://wa.me/{{ $whatsappNumber }}?text={{ rawurlencode('Shalom, saya ingin mengonfirmasi bukti transfer persembahan / donasi GKKD Denpasar.') }}"
+                            href="https://wa.me/{{ $whatsappNumber }}?text={{ $whatsappConfirmMessage }}"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line bg-surface px-6 py-3 text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent dark:hover:text-accent-soft {{ $focusRing }}"
@@ -833,7 +650,7 @@
                                         <rect x="82" y="82" width="8" height="8" fill="white" />
                                     </svg>
                                 </div>
-                                <span class="mt-2 text-center text-[10px] font-bold tracking-widest text-slate-800 uppercase">GKKD DENPASAR</span>
+                                <span class="mt-2 text-center text-[10px] font-bold tracking-widest text-slate-800 uppercase">{{ $donation['qris_merchant'] }}</span>
                             </div>
 
                             <div class="space-y-3 sm:col-span-7">
@@ -842,8 +659,8 @@
                                     Pindai (scan) kode QRIS di samping menggunakan aplikasi perbankan apa pun (BCA, Mandiri, BRI, BNI) atau dompet digital (GoPay, OVO, Dana, ShopeePay).
                                 </p>
                                 <div class="rounded-xl border border-line bg-ink/5 p-3 text-[11px] text-muted">
-                                    <strong class="font-semibold text-ink">NMID:</strong> ID1020268889901<br>
-                                    <strong class="font-semibold text-ink">Nama Merchant:</strong> GKKD DENPASAR
+                                    <strong class="font-semibold text-ink">NMID:</strong> {{ $donation['qris_nmid'] }}<br>
+                                    <strong class="font-semibold text-ink">Nama Merchant:</strong> {{ $donation['qris_merchant'] }}
                                 </div>
                             </div>
                         </div>
@@ -851,7 +668,7 @@
 
                     <div class="mt-8 border-t border-line pt-5">
                         <p class="text-center text-xs text-muted">
-                            <em>"Hendaklah masing-masing memberikan menurut kerelaan hatinya, jangan dengan sedih hati atau karena paksaan."</em> (2 Korintus 9:7)
+                            <em>{{ $donation['verse'] }}</em>
                         </p>
                     </div>
                 </div>
