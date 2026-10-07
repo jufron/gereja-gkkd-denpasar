@@ -449,10 +449,11 @@
     </section>
 
     {{-- Section: Kalender Event & Agenda Gereja (FlyonUI / FullCalendar Layout) --}}
+    {{-- Data event dipindah ke script JSON agar tanda kutip tidak memutus atribut x-data. --}}
+    <script type="application/json" id="calendar-data">@json($calendarEvents)</script>
     <section class="border-t border-line py-16 lg:py-20" x-data="{
-        calendarEvents: @json($calendarEvents),
-        calendarInitialDate: @json($calendarInitialDate),
-        initFullCalendar() {
+        calendarInitialDate: '{{ $calendarInitialDate }}',
+        init() {
             if (typeof FullCalendar !== 'undefined' && this.$refs.calendarEl) {
                 const calendar = new FullCalendar.Calendar(this.$refs.calendarEl, {
                     initialView: 'dayGridMonth',
@@ -461,13 +462,13 @@
                         left: 'title',
                         right: 'prev,next today'
                     },
-                    events: this.calendarEvents,
+                    events: JSON.parse(document.getElementById('calendar-data').textContent),
                     height: 'auto'
                 });
                 calendar.render();
             }
         }
-    }" x-init="setTimeout(() => initFullCalendar(), 100)">
+    }">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="max-w-2xl">
                 <span class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted">
