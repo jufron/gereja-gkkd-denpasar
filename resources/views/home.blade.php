@@ -191,26 +191,25 @@
             </div>
 
             <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach (array_slice($schedules, 0, 3) as $schedule)
-                    <div class="flex flex-col justify-between rounded-2xl border border-line bg-surface p-6 transition-all hover:border-accent/40">
-                        <div>
-                            <div class="flex items-center justify-between">
-                                <span class="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent dark:text-accent-soft">
-                                    {{ $schedule['badge'] }}
-                                </span>
-                                <span class="text-xs text-muted">WITA</span>
+                @foreach ($schedules as $schedule)
+                    <div class="flex flex-col rounded-2xl border border-line bg-surface p-6 transition-all hover:border-accent/40">
+                        <span class="inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold {{ $schedule['badge_color'] ?? 'bg-accent/10 text-accent dark:text-accent-soft' }}">
+                            {{ $schedule['badge'] }}
+                        </span>
+                        <h3 class="mt-4 text-xl font-semibold text-ink">{{ $schedule['title'] }}</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-muted">
+                            {{ $schedule['desc'] }}
+                        </p>
+                        <dl class="mt-6 space-y-3 border-t border-line pt-4 text-sm">
+                            <div class="flex items-center justify-between gap-3">
+                                <dt class="text-muted">Hari</dt>
+                                <dd class="font-semibold text-ink">{{ $schedule['day'] }}</dd>
                             </div>
-                            <h3 class="mt-4 text-xl font-semibold text-ink">{{ $schedule['title'] }}</h3>
-                            <p class="mt-2 text-sm leading-relaxed text-muted">
-                                {{ $schedule['desc'] }}
-                            </p>
-                        </div>
-                        <div class="mt-6 border-t border-line pt-4">
-                            <p class="text-base font-semibold text-ink">{{ $schedule['time'] }}</p>
-                            <a href="{{ $schedule['link'] }}" class="mt-2 inline-flex items-center text-xs font-semibold text-accent hover:underline dark:text-accent-soft">
-                                Detail kegiatan &rarr;
-                            </a>
-                        </div>
+                            <div class="flex items-center justify-between gap-3">
+                                <dt class="text-muted">Waktu</dt>
+                                <dd class="font-semibold text-ink">{{ $schedule['time'] }}</dd>
+                            </div>
+                        </dl>
                     </div>
                 @endforeach
             </div>

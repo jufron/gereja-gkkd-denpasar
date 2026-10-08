@@ -15,12 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            // auth
-            // Route::middleware('web')->group(base_path('routes/auth.php'));
-            // admin rouet
-            // Route::middleware('web', 'auth', 'role:admin')->group(base_path('routes/dashboard/admin.php'));
-            // guru rouet
-            // Route::middleware('web', 'auth', 'role:guru')->group(base_path('routes/dashboard/guru.php'));
+            // auth routes
+            Route::middleware('web')->group(base_path('routes/auth.php'));
+            // dashboard routes (middleware auth diatur di dalam file)
+            Route::middleware('web')->group(base_path('routes/dashboard.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {

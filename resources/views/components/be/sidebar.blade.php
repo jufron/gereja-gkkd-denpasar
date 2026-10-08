@@ -15,7 +15,7 @@
         [
             'label' => 'Ibadah & Agenda',
             'items' => [
-                ['label' => 'Jadwal Ibadah', 'route' => null, 'icon' => 'fa-calendar-days'],
+                ['label' => 'Jadwal pertemuan & Ibadah', 'route' => 'jadwal', 'icon' => 'fa-calendar-days'],
                 ['label' => 'Keuangan & Persembahan', 'route' => null, 'icon' => 'fa-coins'],
             ],
         ],

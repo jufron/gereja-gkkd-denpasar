@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Contracts\Services\HomeContentServiceInterface;
+use App\Models\Schedule;
 
 class HomeContentService implements HomeContentServiceInterface
 {
     /**
-     * Susun seluruh data statis untuk halaman utama.
+     * Susun seluruh data untuk halaman utama (jadwal dari database, sisanya statis).
      *
      * @return array<string, mixed>
      */
@@ -18,33 +19,21 @@ class HomeContentService implements HomeContentServiceInterface
         $whatsappMessage = rawurlencode('Shalom, saya ingin bertanya tentang GKKD Denpasar.');
         $whatsappConfirmMessage = rawurlencode('Shalom, saya ingin mengonfirmasi bukti transfer persembahan / donasi GKKD Denpasar.');
 
-        // Kegiatan & pertemuan jemaat.
-        $schedules = [
-            [
-                'title' => 'Pelayanan',
-                'time' => 'Bersamaan dengan Ibadah',
-                'day' => 'Minggu',
-                'badge' => 'Tim Pelayanan',
-                'desc' => 'Ragam tim pelayanan gereja: musik, multimedia, diakonia, doa, anak, dan generasi muda.',
-                'link' => route('kegiatan.pelayanan'),
-            ],
-            [
-                'title' => 'Komsel',
-                'time' => 'Pukul 19.30 WITA',
-                'day' => 'Kamis / Jumat',
-                'badge' => 'Komunitas Sel',
-                'desc' => 'Kelompok kecil di rumah-rumah jemaat di Renon, Sanur, Denpasar Barat, dan Badung untuk saling peduli.',
-                'link' => route('kegiatan.komsel'),
-            ],
-            [
-                'title' => 'Retret / Camp',
-                'time' => 'Tahunan',
-                'day' => 'Sep / Des',
-                'badge' => 'Keluarga & Pemuda',
-                'desc' => 'Retret keluarga, camp pemuda, dan camp anak tahunan untuk pembaharuan iman dan relasi.',
-                'link' => route('kegiatan.retret-camp'),
-            ],
-        ];
+        // Kegiatan & pertemuan jemaat (diambil dari tabel schedules + relasi badges).
+        $schedules = Schedule::query()
+            ->with('badge')
+            ->active()
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn (Schedule $schedule) => [
+                'title' => $schedule->title,
+                'time' => $schedule->time,
+                'day' => $schedule->day,
+                'badge' => $schedule->badge?->name,
+                'badge_color' => $schedule->badge?->color,
+                'desc' => $schedule->description,
+            ])
+            ->all();
 
         // Ringkasan pengumuman terbaru gereja.
         $announcements = [

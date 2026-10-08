@@ -7,7 +7,7 @@
             description="Kelola peran (role), permission, dan user yang memiliki akses."
         />
 
-        <livewire:hak-akses />
+        <livewire:dashboard.hak-akses />
 
     </main>
 

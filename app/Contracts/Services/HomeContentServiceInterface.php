@@ -5,7 +5,7 @@ namespace App\Contracts\Services;
 interface HomeContentServiceInterface
 {
     /**
-     * Susun seluruh data statis untuk halaman utama.
+     * Susun seluruh data untuk halaman utama.
      *
      * @return array<string, mixed>
      */

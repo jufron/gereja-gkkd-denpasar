@@ -1,9 +1,17 @@
 <?php
 
-use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\PagesController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Front-end Routes
+|--------------------------------------------------------------------------
+|
+| Route halaman publik (front-end). Route dashboard ada di
+| routes/dashboard.php dan route auth ada di routes/auth.php.
+|
+*/
 
 Route::controller(PagesController::class)->group(function () {
     Route::get('/', 'index')->name('home');
@@ -20,43 +28,3 @@ Route::controller(PagesController::class)->group(function () {
         Route::get('khotbah/{slug}', 'khotbahShow')->name('khotbah.show');
     });
 });
-
-Route::view('test', 'dashboard.index')
-    ->name('test');
-
-Route::view('table', 'dashboard.table')
-    ->name('table');
-
-Route::view('dashboard', 'dashboard.index')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::view('profile', 'dashboard.profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
-Route::get('profile/keamanan', fn () => view('dashboard.security', [
-    // TODO: ganti array dummy ini dengan query ke tabel sessions + parse user_agent.
-    'devices' => [
-        ['browser' => 'Chrome', 'os' => 'Windows', 'type' => 'desktop', 'ip' => '192.168.1.1', 'location' => 'Denpasar, Bali', 'last_active' => 'Saat ini', 'current' => true],
-        ['browser' => 'Safari', 'os' => 'iPhone', 'type' => 'mobile', 'ip' => '192.168.1.2', 'location' => 'Denpasar, Bali', 'last_active' => '2 jam lalu', 'current' => false],
-    ],
-]))->middleware(['auth'])->name('profile.security');
-
-Route::view('pengaturan', 'dashboard.pengaturan')
-    ->middleware(['auth'])
-    ->name('pengaturan');
-
-Route::view('hak-akses', 'dashboard.hak-akses')
-    ->middleware(['auth', 'role:Administrator'])
-    ->name('hak-akses');
-
-Route::get('all-user', [UserController::class, 'index'])
-    ->middleware(['auth', 'role:Administrator'])
-    ->name('all-user');
-
-Route::get('log-aktivitas', [ActivityLogController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('log-aktivitas');
-
-require __DIR__.'/auth.php';

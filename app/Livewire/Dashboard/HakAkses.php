@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Dashboard;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,8 +10,20 @@ use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
+/**
+ * Halaman "Hak Akses" — kelola role, permission, dan user pemilik role.
+ *
+ * Pola master-detail: tabel role di atas sebagai daftar utama, lalu panel
+ * detail di bawah untuk mengatur permission dan user dari role terpilih.
+ *
+ * Akses dibatasi hanya untuk user ber-role Administrator (lihat mount()).
+ */
 final class HakAkses extends Component
 {
+    // ─────────────────────────────────────────────────────────────────────
+    // State komponen
+    // ─────────────────────────────────────────────────────────────────────
+
     /** Id role yang sedang dikelola di panel detail. */
     #[Locked]
     public ?int $roleId = null;
@@ -36,6 +48,10 @@ final class HakAkses extends Component
 
     public string $pesanTone = 'success';
 
+    // ─────────────────────────────────────────────────────────────────────
+    // Aturan bisnis
+    // ─────────────────────────────────────────────────────────────────────
+
     /** Role dasar yang tidak boleh dihapus. */
     private const ROLE_TERKUNCI = ['Administrator'];
 
@@ -44,6 +60,16 @@ final class HakAkses extends Component
         'Administrator' => ['Hak Akses'],
     ];
 
+    // ─────────────────────────────────────────────────────────────────────
+    // Siklus hidup & helper
+    // ─────────────────────────────────────────────────────────────────────
+
+    /** Batasi halaman hanya untuk Administrator. */
+    public function mount(): void
+    {
+        abort_unless(auth()->user()?->hasRole('Administrator'), 403);
+    }
+
     /** Simpan notifikasi sementara untuk ditampilkan di view. */
     public function setPesan(string $pesan, string $tone = 'success'): void
     {
@@ -51,11 +77,11 @@ final class HakAkses extends Component
         $this->pesanTone = $tone;
     }
 
-    public function mount(): void
-    {
-        abort_unless(auth()->user()?->hasRole('Administrator'), 403);
-    }
+    // ─────────────────────────────────────────────────────────────────────
+    // Data (computed)
+    // ─────────────────────────────────────────────────────────────────────
 
+    /** Semua role beserta permission-nya dan jumlah user. */
     #[Computed]
     public function roles(): Collection
     {
@@ -65,12 +91,14 @@ final class HakAkses extends Component
             ->get();
     }
 
+    /** Semua permission yang terdaftar. */
     #[Computed]
     public function permissions(): Collection
     {
         return Permission::orderBy('name')->get();
     }
 
+    /** Role yang sedang dipilih di panel detail. */
     public function roleTerpilih(): ?Role
     {
         return $this->roleId
@@ -91,6 +119,11 @@ final class HakAkses extends Component
             ->get();
     }
 
+    // ─────────────────────────────────────────────────────────────────────
+    // Aksi: pilih role
+    // ─────────────────────────────────────────────────────────────────────
+
+    /** Pilih role untuk dikelola di panel detail. */
     public function pilihRole(int $roleId): void
     {
         $this->roleId = $roleId;
@@ -98,12 +131,18 @@ final class HakAkses extends Component
         $this->formRoleOpen = false;
     }
 
+    // ─────────────────────────────────────────────────────────────────────
+    // Aksi CRUD role
+    // ─────────────────────────────────────────────────────────────────────
+
+    /** Buka modal dalam mode tambah role baru. */
     public function bukaFormTambah(): void
     {
         $this->reset('nama', 'roleId');
         $this->formRoleOpen = true;
     }
 
+    /** Buka modal dalam mode ubah nama role. */
     public function bukaFormUbah(int $roleId): void
     {
         $role = Role::findOrFail($roleId);
@@ -114,6 +153,7 @@ final class HakAkses extends Component
         $this->formRoleOpen = true;
     }
 
+    /** Simpan role (buat baru atau perbarui nama). */
     public function simpanRole(): void
     {
         $data = $this->validate([
@@ -122,6 +162,7 @@ final class HakAkses extends Component
 
         $nama = trim($data['nama']);
 
+        // Nama role harus unik per guard, kecuali untuk role yang sedang diubah.
         $sudahDipakai = Role::query()
             ->where('name', $nama)
             ->where('guard_name', 'web')
@@ -155,18 +196,22 @@ final class HakAkses extends Component
 
             $this->setPesan('Role baru berhasil ditambahkan.', 'success');
         }
+
+        // Reset cache computed agar daftar role diperbarui.
         unset($this->roles);
 
         $this->reset('nama');
         $this->formRoleOpen = false;
     }
 
+    /** Buka modal konfirmasi hapus role. */
     public function bukaKonfirmasiHapus(int $rowId): void
     {
         $this->hapusId = $rowId;
         $this->hapusOpen = true;
     }
 
+    /** Hapus role, dengan penjagaan role dasar dan role yang masih dipakai. */
     public function hapusRole(): void
     {
         $role = Role::withCount('users')->findOrFail($this->hapusId);
@@ -202,6 +247,10 @@ final class HakAkses extends Component
         $this->setPesan('Role berhasil dihapus.', 'success');
     }
 
+    // ─────────────────────────────────────────────────────────────────────
+    // Aksi: permission role
+    // ─────────────────────────────────────────────────────────────────────
+
     /** Cek apakah sebuah permission tidak boleh dicabut dari role ini. */
     public function permissionTerkunci(Role $role, string $namaPermission): bool
     {
@@ -215,6 +264,7 @@ final class HakAkses extends Component
 
         abort_unless($role !== null, 404);
 
+        // Cegah pencabutan permission yang dikunci untuk role tersebut.
         if ($this->permissionTerkunci($role, $namaPermission) && $role->hasPermissionTo($namaPermission)) {
             $this->setPesan("Permission \"{$namaPermission}\" pada role \"{$role->name}\" permanen dan tidak bisa dicabut.", 'error');
 
@@ -237,6 +287,11 @@ final class HakAkses extends Component
         unset($this->roles);
     }
 
+    // ─────────────────────────────────────────────────────────────────────
+    // Aksi: user pemilik role
+    // ─────────────────────────────────────────────────────────────────────
+
+    /** Assign user terpilih ke role yang sedang dikelola. */
     public function assignUser(): void
     {
         $role = $this->roleTerpilih();
@@ -261,6 +316,7 @@ final class HakAkses extends Component
         $this->setPesan("User \"{$user->name}\" ditambahkan ke role \"{$role->name}\".", 'success');
     }
 
+    /** Lepas user dari role yang sedang dikelola. */
     public function lepasUser(int $userId): void
     {
         $role = $this->roleTerpilih();
@@ -279,6 +335,10 @@ final class HakAkses extends Component
 
         $this->setPesan("User \"{$user->name}\" dilepas dari role \"{$role->name}\".", 'success');
     }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Render
+    // ─────────────────────────────────────────────────────────────────────
 
     public function render()
     {

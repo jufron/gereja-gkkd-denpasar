@@ -56,7 +56,7 @@ class HakAksesTest extends TestCase
     public function test_bisa_menambah_role_kustom(): void
     {
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('bukaFormTambah')
             ->set('nama', 'Multimedia')
             ->call('simpanRole')
@@ -71,7 +71,7 @@ class HakAksesTest extends TestCase
     public function test_nama_role_wajib_unik(): void
     {
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->set('nama', 'Administrator')
             ->call('simpanRole')
             ->assertHasErrors(['nama']);
@@ -82,7 +82,7 @@ class HakAksesTest extends TestCase
         $role = Role::create(['name' => 'Singer', 'guard_name' => 'web']);
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('bukaFormUbah', $role->id)
             ->assertSet('formRoleOpen', true)
             ->set('nama', 'Worship Team')
@@ -100,7 +100,7 @@ class HakAksesTest extends TestCase
         $role = Role::create(['name' => 'Singer', 'guard_name' => 'web']);
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('bukaFormUbah', $role->id)
             ->set('nama', 'Singer')
             ->call('simpanRole')
@@ -113,7 +113,7 @@ class HakAksesTest extends TestCase
     public function test_form_tambah_membuka_modal(): void
     {
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('bukaFormTambah')
             ->assertSet('formRoleOpen', true)
             ->assertSet('roleId', null);
@@ -126,7 +126,7 @@ class HakAksesTest extends TestCase
         $user->assignRole($role);
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('bukaKonfirmasiHapus', $role->id)
             ->call('hapusRole')
             ->assertOk();
@@ -139,7 +139,7 @@ class HakAksesTest extends TestCase
         $role = Role::where('name', 'Administrator')->first();
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('bukaKonfirmasiHapus', $role->id)
             ->call('hapusRole')
             ->assertOk();
@@ -153,7 +153,7 @@ class HakAksesTest extends TestCase
         $permission = Permission::firstOrCreate(['name' => 'Kelola Berita', 'guard_name' => 'web']);
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->call('togglePermission', 'Kelola Berita')
             ->assertOk();
@@ -161,7 +161,7 @@ class HakAksesTest extends TestCase
         $this->assertTrue($role->fresh()->hasPermissionTo('Kelola Berita'));
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->call('togglePermission', 'Kelola Berita')
             ->assertOk();
@@ -177,7 +177,7 @@ class HakAksesTest extends TestCase
         $user = User::factory()->create();
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->set('userId', $user->id)
             ->call('assignUser')
@@ -186,7 +186,7 @@ class HakAksesTest extends TestCase
         $this->assertTrue($user->fresh()->hasRole($role));
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->call('lepasUser', $user->id)
             ->assertOk();
@@ -197,7 +197,7 @@ class HakAksesTest extends TestCase
     public function test_setiap_perubahan_dicatat_di_activity_log(): void
     {
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->set('nama', 'Multimedia')
             ->call('simpanRole')
             ->assertOk();
@@ -214,7 +214,7 @@ class HakAksesTest extends TestCase
         $role = Role::where('name', 'Administrator')->first();
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->call('togglePermission', 'Hak Akses')
             ->assertOk();
@@ -233,7 +233,7 @@ class HakAksesTest extends TestCase
         $role = Role::where('name', 'Administrator')->first();
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->call('togglePermission', 'Kelola Berita')
             ->assertOk();
@@ -241,7 +241,7 @@ class HakAksesTest extends TestCase
         $this->assertFalse($role->fresh()->hasPermissionTo('Kelola Berita'));
 
         Livewire::actingAs($this->admin)
-            ->test('hak-akses')
+            ->test('dashboard.hak-akses')
             ->call('pilihRole', $role->id)
             ->call('togglePermission', 'Kelola Berita')
             ->assertOk();
