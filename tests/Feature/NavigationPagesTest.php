@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class NavigationPagesTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_all_navbar_routes_are_accessible(): void
     {
         $routes = [

@@ -24,7 +24,7 @@ class ProfileTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('Administrator');
 
-        $response = $this->actingAs($user)->get('/admin/profile');
+        $response = $this->actingAs($user)->get(route('dashboard.profile'));
 
         // /profile merender dashboard.profile (UI statis), bukan form Livewire Breeze.
         $response
@@ -106,5 +106,29 @@ class ProfileTest extends TestCase
             ->assertNoRedirect();
 
         $this->assertNotNull($user->fresh());
+    }
+
+    public function test_profile_jemaat_information_can_be_updated(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->put(route('dashboard.profile.update'), [
+            'nama_lengkap' => 'Budi Santoso',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+            'alamat' => 'Denpasar',
+            'status_anggota' => 'aktif',
+            'tanggal_bergabung' => '2020-01-01',
+            'no_hp' => '6281234567890',
+            'wa_consent' => '1',
+        ]);
+
+        $response->assertRedirect()->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('profiles', [
+            'user_id' => $user->id,
+            'nama_lengkap' => 'Budi Santoso',
+            'wa_consent' => true,
+        ]);
     }
 }

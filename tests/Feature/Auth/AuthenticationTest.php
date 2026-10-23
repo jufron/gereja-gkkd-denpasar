@@ -86,6 +86,28 @@ class AuthenticationTest extends TestCase
             ->assertRedirect(route('home', absolute: false));
     }
 
+    public function test_user_biasa_tidak_melihat_menu_dashboard(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('User');
+
+        $this->actingAs($user)
+            ->get(route('home'))
+            ->assertOk()
+            ->assertDontSee('Dashboard');
+    }
+
+    public function test_admin_melihat_menu_dashboard(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('Administrator');
+
+        $this->actingAs($user)
+            ->get(route('home'))
+            ->assertOk()
+            ->assertSee('Dashboard');
+    }
+
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();
@@ -110,7 +132,7 @@ class AuthenticationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get('/admin');
+        $response = $this->get(route('admin.index'));
 
         $response
             ->assertOk()

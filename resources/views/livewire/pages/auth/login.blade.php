@@ -20,7 +20,7 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        // EnsureDashboardAccess yang menentukan: admin lanjut, role lain ke beranda.
+        // DashboardController yang menentukan: admin ke /admin, tim pelayanan ke /pelayanan, lainnya ke beranda.
         $this->redirect(route('dashboard', absolute: false), navigate: true);
     }
 }; ?>

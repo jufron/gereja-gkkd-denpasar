@@ -107,10 +107,10 @@
                     <p class="truncate text-[11px] text-muted">{{ $user?->email ?? '-' }}</p>
                 </div>
 
-                <a href="{{ route('admin.profile') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-muted transition-colors hover:bg-ink/5 hover:text-accent">
+                <a href="{{ route('dashboard.profile') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-muted transition-colors hover:bg-ink/5 hover:text-accent">
                     <i class="fa-solid fa-user-gear w-4 text-center"></i> Profil Saya
                 </a>
-                <a href="{{ route('admin.profile.security') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-muted transition-colors hover:bg-ink/5 hover:text-accent">
+                <a href="{{ route('dashboard.profile.security') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-muted transition-colors hover:bg-ink/5 hover:text-accent">
                     <i class="fa-solid fa-shield-halved w-4 text-center"></i> Keamanan
                 </a>
                 <div class="my-1 border-t border-line"></div>

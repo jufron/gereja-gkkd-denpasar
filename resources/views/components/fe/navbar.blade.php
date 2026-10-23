@@ -28,6 +28,9 @@
 
     $user = auth()->user();
 
+    // Dashboard hanya untuk Administrator & Tim Pelayanan. User lain tetap bisa login, tapi tanpa menu dashboard.
+    $canAccessDashboard = $user?->hasAnyRole(['Administrator', 'Tim Pelayanan']) ?? false;
+
     $initials = collect(explode(' ', trim($user?->name ?? '')))
         ->filter()
         ->map(fn ($word) => strtoupper(substr($word, 0, 1)))
@@ -213,16 +216,18 @@
                                     <p class="truncate text-xs font-semibold text-ink">{{ $user->name }}</p>
                                     <p class="truncate text-[11px] text-muted">{{ $user->email }}</p>
                                 </div>
-                                <a
-                                    href="{{ route('dashboard') }}"
-                                    role="menuitem"
-                                    class="mt-1 flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-accent/10 hover:text-accent dark:hover:text-accent-soft {{ $focusRing }}"
-                                >
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v7.5h7.5V3M12.75 12v9h7.5v-9M3.75 21h7.5v-4.5h-7.5V21Z" />
-                                    </svg>
-                                    Dashboard
-                                </a>
+                                @if ($canAccessDashboard)
+                                    <a
+                                        href="{{ route('dashboard') }}"
+                                        role="menuitem"
+                                        class="mt-1 flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-accent/10 hover:text-accent dark:hover:text-accent-soft {{ $focusRing }}"
+                                    >
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v7.5h7.5V3M12.75 12v9h7.5v-9M3.75 21h7.5v-4.5h-7.5V21Z" />
+                                        </svg>
+                                        Dashboard
+                                    </a>
+                                @endif
                                 <button
                                     type="button"
                                     role="menuitem"
@@ -376,13 +381,15 @@
             </div>
 
             <div class="space-y-2">
-                <a
-                    href="{{ route('dashboard') }}"
-                    @click="$store.nav.open = false"
-                    class="flex items-center justify-center gap-2 rounded-full border border-line px-5 py-2.5 text-base font-medium text-ink transition-colors hover:border-accent hover:text-accent {{ $focusRing }}"
-                >
-                    Dashboard
-                </a>
+                @if ($canAccessDashboard)
+                    <a
+                        href="{{ route('dashboard') }}"
+                        @click="$store.nav.open = false"
+                        class="flex items-center justify-center gap-2 rounded-full border border-line px-5 py-2.5 text-base font-medium text-ink transition-colors hover:border-accent hover:text-accent {{ $focusRing }}"
+                    >
+                        Dashboard
+                    </a>
+                @endif
                 <button
                     type="button"
                     @click="$store.nav.open = false; $dispatch('open-modal', 'confirm-logout')"

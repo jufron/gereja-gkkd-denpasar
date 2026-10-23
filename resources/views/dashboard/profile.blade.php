@@ -2,6 +2,12 @@
 
     <main class="mx-auto w-full max-w-5xl flex-1 space-y-6" x-data="{ photoOpen: false, photoPreview: null }">
 
+        @if (session('status'))
+            <div class="flex items-center gap-2 rounded-2xl border border-success/30 bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+                <i class="fa-solid fa-circle-check"></i> {{ session('status') }}
+            </div>
+        @endif
+
         {{-- Account information --}}
         <x-be.card class="overflow-hidden">
             <div class="border-b border-line p-5">
@@ -63,6 +69,79 @@
                     </x-be.field>
                     <div class="flex justify-end sm:col-span-2">
                         <x-be.button icon="fa-check">Simpan Perubahan</x-be.button>
+                    </div>
+                </form>
+            </div>
+        </x-be.card>
+
+        {{-- Profil jemaat (one-to-one dengan user) --}}
+        @php $profile = $profile ?? new \App\Models\Profile; @endphp
+        <x-be.card class="overflow-hidden">
+            <div class="border-b border-line p-5">
+                <h3 class="text-base font-bold text-ink">Profil Jemaat</h3>
+                <p class="text-xs text-muted">Data keanggotaan dan kontak WhatsApp Anda.</p>
+            </div>
+
+            <div class="p-5">
+                <form method="POST" action="{{ route('dashboard.profile.update') }}" class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    @csrf
+                    @method('PUT')
+
+                    <x-be.field label="Nama Lengkap" for="profileName" :help="$errors->first('nama_lengkap')">
+                        <input id="profileName" name="nama_lengkap" type="text" value="{{ old('nama_lengkap', $profile->nama_lengkap) }}" class="be-input" required>
+                    </x-be.field>
+
+                    <x-be.field label="Jenis Kelamin" for="profileGender" :help="$errors->first('jenis_kelamin')">
+                        <select id="profileGender" name="jenis_kelamin" class="be-input" required>
+                            <option value="L" @selected(old('jenis_kelamin', $profile->jenis_kelamin) === 'L')>Laki-laki</option>
+                            <option value="P" @selected(old('jenis_kelamin', $profile->jenis_kelamin) === 'P')>Perempuan</option>
+                        </select>
+                    </x-be.field>
+
+                    <x-be.field label="Tanggal Lahir" for="profileBirth" :help="$errors->first('tanggal_lahir')">
+                        <input id="profileBirth" name="tanggal_lahir" type="date" value="{{ old('tanggal_lahir', $profile->tanggal_lahir?->format('Y-m-d')) }}" class="be-input">
+                    </x-be.field>
+
+                    <x-be.field label="Tanggal Bergabung" for="profileJoined" :help="$errors->first('tanggal_bergabung')">
+                        <input id="profileJoined" name="tanggal_bergabung" type="date" value="{{ old('tanggal_bergabung', $profile->tanggal_bergabung?->format('Y-m-d')) }}" class="be-input">
+                    </x-be.field>
+
+                    <x-be.field label="Alamat" for="profileAddress" class="sm:col-span-2" :help="$errors->first('alamat')">
+                        <input id="profileAddress" name="alamat" type="text" value="{{ old('alamat', $profile->alamat) }}" class="be-input">
+                    </x-be.field>
+
+                    <x-be.field label="Status Keanggotaan" for="profileStatus" :help="$errors->first('status_anggota')">
+                        <select id="profileStatus" name="status_anggota" class="be-input" required>
+                            @foreach (['aktif' => 'Aktif', 'nonaktif' => 'Nonaktif', 'pindah' => 'Pindah', 'meninggal' => 'Meninggal'] as $value => $label)
+                                <option value="{{ $value }}" @selected(old('status_anggota', $profile->status_anggota ?? 'aktif') === $value)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </x-be.field>
+
+                    <x-be.field label="Nomor WhatsApp" for="profilePhone" hint="Format internasional, mis. 6281234567890." :help="$errors->first('no_hp')">
+                        <input id="profilePhone" name="no_hp" type="tel" value="{{ old('no_hp', $profile->no_hp) }}" class="be-input" placeholder="6281234567890">
+                    </x-be.field>
+
+                    <div class="sm:col-span-2">
+                        <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-line p-4">
+                            <input type="checkbox" name="wa_consent" value="1" @checked(old('wa_consent', $profile->wa_consent)) class="mt-0.5 h-5 w-5 rounded border-line accent-accent focus:ring-accent">
+                            <span>
+                                <span class="block text-sm font-semibold text-ink">Setuju menerima pesan WhatsApp</span>
+                                <span class="block text-xs text-muted">Saya setuju dihubungi gereja melalui WhatsApp untuk informasi kegiatan dan pelayanan.</span>
+                            </span>
+                        </label>
+                        <p class="mt-2 text-[11px] text-muted">
+                            Status verifikasi nomor:
+                            @if ($profile->wa_verified_at)
+                                <span class="font-semibold text-success">Terverifikasi</span>
+                            @else
+                                <span class="font-semibold text-warning">Belum terverifikasi</span>
+                            @endif
+                        </p>
+                    </div>
+
+                    <div class="flex justify-end sm:col-span-2">
+                        <x-be.button icon="fa-check">Simpan Profil</x-be.button>
                     </div>
                 </form>
             </div>

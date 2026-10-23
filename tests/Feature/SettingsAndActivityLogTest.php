@@ -25,7 +25,7 @@ class SettingsAndActivityLogTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('Administrator');
 
-        $response = $this->actingAs($user)->get('/admin/pengaturan');
+        $response = $this->actingAs($user)->get(route('admin.pengaturan'));
 
         $response->assertOk()->assertSee('Pengaturan');
     }
@@ -35,7 +35,7 @@ class SettingsAndActivityLogTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('Administrator');
 
-        $response = $this->actingAs($user)->get('/admin/log-aktivitas');
+        $response = $this->actingAs($user)->get(route('admin.log-aktivitas'));
 
         $response->assertOk()->assertSee('Log Aktivitas');
     }
@@ -63,7 +63,7 @@ class SettingsAndActivityLogTest extends TestCase
 
     public function test_activity_log_page_is_guest_protected(): void
     {
-        $response = $this->get('/admin/log-aktivitas');
+        $response = $this->get(route('admin.log-aktivitas'));
 
         $response->assertRedirect('/login');
     }
