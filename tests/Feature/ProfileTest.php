@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Tests\TestCase;
@@ -11,11 +12,19 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(RolePermissionSeeder::class);
+    }
+
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();
+        $user->assignRole('Administrator');
 
-        $response = $this->actingAs($user)->get('/profile');
+        $response = $this->actingAs($user)->get('/admin/profile');
 
         // /profile merender dashboard.profile (UI statis), bukan form Livewire Breeze.
         $response

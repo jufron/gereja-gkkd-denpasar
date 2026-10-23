@@ -24,10 +24,21 @@ class RolePermissionSeeder extends Seeder
             ['name' => $name, 'guard_name' => 'web'],
         )->name);
 
+        // Rename role lama Staff -> Bendahara tanpa memutus akses user.
+        $bendahara = Role::firstOrCreate(['name' => 'Bendahara', 'guard_name' => 'web']);
+
+        if ($staff = Role::where('name', 'Staff')->where('guard_name', 'web')->first()) {
+            $staff->users()->each(fn ($user) => $user->assignRole($bendahara));
+            $staff->users()->detach();
+            $staff->delete();
+        }
+
         $matrix = [
             'Administrator' => $permissions->all(),
             'Pendeta' => ['Kelola Berita', 'Kelola Jadwal'],
-            'Staff' => ['Kelola Berita', 'Kelola Keuangan'],
+            'Bendahara' => ['Kelola Berita', 'Kelola Keuangan'],
+            'Tim Pelayanan' => ['Kelola Jadwal'],
+            'User' => [],
         ];
 
         foreach ($matrix as $roleName => $rolePermissions) {

@@ -8,7 +8,7 @@
     <nav class="flex text-xs text-muted" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-2">
             <li class="inline-flex items-center">
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 transition-colors hover:text-accent">
+                <a href="{{ route('admin.index') }}" class="inline-flex items-center gap-1.5 transition-colors hover:text-accent">
                     <i class="fa-solid fa-house text-[11px]"></i>
                     Dashboard
                 </a>

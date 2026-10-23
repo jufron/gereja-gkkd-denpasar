@@ -26,7 +26,7 @@ class AllUserPageTest extends TestCase
     public function test_halaman_dapat_diakses_oleh_administrator(): void
     {
         $this->actingAs($this->admin)
-            ->get(route('all-user'))
+            ->get(route('admin.all-user'))
             ->assertOk()
             ->assertSeeText('Daftar Pengguna');
     }
@@ -34,16 +34,16 @@ class AllUserPageTest extends TestCase
     public function test_halaman_ditolak_untuk_user_bukan_administrator(): void
     {
         $user = User::factory()->create();
-        $user->assignRole('Staff');
+        $user->assignRole('Bendahara');
 
         $this->actingAs($user)
-            ->get(route('all-user'))
+            ->get(route('admin.all-user'))
             ->assertForbidden();
     }
 
     public function test_halaman_dilindungi_dari_tamu(): void
     {
-        $this->get(route('all-user'))
+        $this->get(route('admin.all-user'))
             ->assertRedirect('/login');
     }
 
@@ -54,7 +54,7 @@ class AllUserPageTest extends TestCase
         User::factory()->create(['name' => 'Wayan Lokal', 'email' => 'wayan.lokal@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user'))
+            ->get(route('admin.all-user'))
             ->assertOk()
             ->assertSeeText('Budi Google')
             ->assertSeeText('Sari Facebook')
@@ -67,13 +67,13 @@ class AllUserPageTest extends TestCase
         User::factory()->create(['name' => 'Ketut Sari', 'email' => 'ketut@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['q' => 'wardana']))
+            ->get(route('admin.all-user', ['q' => 'wardana']))
             ->assertOk()
             ->assertSeeText('Made Wardana')
             ->assertDontSeeText('Ketut Sari');
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['q' => 'ketut@example.com']))
+            ->get(route('admin.all-user', ['q' => 'ketut@example.com']))
             ->assertOk()
             ->assertSeeText('Ketut Sari')
             ->assertDontSeeText('Made Wardana');
@@ -86,7 +86,7 @@ class AllUserPageTest extends TestCase
         User::factory()->create(['name' => 'Wayan Lokal', 'email' => 'wayan.lokal@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['provider' => 'google']))
+            ->get(route('admin.all-user', ['provider' => 'google']))
             ->assertOk()
             ->assertSeeText('Budi Google')
             ->assertDontSeeText('Sari Facebook')
@@ -100,7 +100,7 @@ class AllUserPageTest extends TestCase
         User::factory()->create(['name' => 'Wayan Lokal', 'email' => 'wayan.lokal@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['provider' => 'facebook']))
+            ->get(route('admin.all-user', ['provider' => 'facebook']))
             ->assertOk()
             ->assertSeeText('Sari Facebook')
             ->assertDontSeeText('Budi Google')
@@ -113,7 +113,7 @@ class AllUserPageTest extends TestCase
         User::factory()->create(['name' => 'Wayan Lokal', 'email' => 'wayan.lokal@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['provider' => 'lokal']))
+            ->get(route('admin.all-user', ['provider' => 'lokal']))
             ->assertOk()
             ->assertSeeText('Wayan Lokal')
             ->assertDontSeeText('Budi Google');
@@ -128,12 +128,12 @@ class AllUserPageTest extends TestCase
             ->create(['name' => 'Andi Multi', 'email' => 'andi.multi@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['provider' => 'google']))
+            ->get(route('admin.all-user', ['provider' => 'google']))
             ->assertOk()
             ->assertSeeText('Andi Multi');
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['provider' => 'facebook']))
+            ->get(route('admin.all-user', ['provider' => 'facebook']))
             ->assertOk()
             ->assertSeeText('Andi Multi');
 
@@ -147,7 +147,7 @@ class AllUserPageTest extends TestCase
         User::factory()->has(SocialAccount::factory()->facebook())->create(['name' => 'Budi Facebook', 'email' => 'budi.facebook@example.com']);
 
         $this->actingAs($this->admin)
-            ->get(route('all-user', ['q' => 'budi', 'provider' => 'google']))
+            ->get(route('admin.all-user', ['q' => 'budi', 'provider' => 'google']))
             ->assertOk()
             ->assertSeeText('Budi Google')
             ->assertDontSeeText('Sari Google')

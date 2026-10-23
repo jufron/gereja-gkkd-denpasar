@@ -17,8 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             // auth routes
             Route::middleware('web')->group(base_path('routes/auth.php'));
-            // dashboard routes (middleware auth diatur di dalam file)
-            Route::middleware('web')->group(base_path('routes/dashboard.php'));
+            // dashboard routes (auth sudah dipasang di grup ini)
+            Route::middleware('web', 'auth')->group(base_path('routes/dashboard.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {

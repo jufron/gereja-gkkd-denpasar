@@ -2,11 +2,11 @@
 
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Spatie\Permission\Models\Role;
 
 new #[Layout('layouts.guest')] class extends Component
 {
@@ -30,9 +30,11 @@ new #[Layout('layouts.guest')] class extends Component
 
         event(new Registered($user = User::create($validated)));
 
-        Auth::login($user);
+        $user->assignRole(Role::findOrCreate('User', 'web'));
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        session()->flash('status', 'Akun berhasil dibuat. Silakan masuk.');
+
+        $this->redirect(route('login', absolute: false), navigate: true);
     }
 }; ?>
 

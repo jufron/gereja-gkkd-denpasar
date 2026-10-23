@@ -28,7 +28,7 @@ class JadwalIbadahTest extends TestCase
     public function test_halaman_dapat_diakses_oleh_administrator(): void
     {
         $this->actingAs($this->admin)
-            ->get(route('jadwal'))
+            ->get(route('admin.jadwal-ibadah-dan-pelayanan'))
             ->assertOk()
             ->assertSeeText('Badge Kategori Jadwal')
             ->assertSeeText('Daftar Jadwal');
@@ -37,10 +37,10 @@ class JadwalIbadahTest extends TestCase
     public function test_halaman_ditolak_untuk_user_tanpa_permission(): void
     {
         $user = User::factory()->create();
-        $user->assignRole('Staff');
+        $user->assignRole('Bendahara');
 
         $this->actingAs($user)
-            ->get(route('jadwal'))
+            ->get(route('admin.jadwal-ibadah-dan-pelayanan'))
             ->assertForbidden();
     }
 

@@ -55,7 +55,7 @@
                     <button type="submit" class="be-btn be-btn-ghost w-full">
                         <i class="fa-solid fa-filter text-[11px]"></i> Filter
                     </button>
-                    <a href="{{ route('log-aktivitas') }}" class="be-btn be-btn-ghost" title="Reset">
+                    <a href="{{ route('admin.log-aktivitas') }}" class="be-btn be-btn-ghost" title="Reset">
                         <i class="fa-solid fa-rotate-left text-[11px]"></i>
                     </a>
                 </div>

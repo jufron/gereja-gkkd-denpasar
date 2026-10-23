@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Tests\TestCase;
@@ -9,6 +11,13 @@ use Tests\TestCase;
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(RolePermissionSeeder::class);
+    }
 
     public function test_registration_screen_can_be_rendered(): void
     {
@@ -29,8 +38,12 @@ class RegistrationTest extends TestCase
 
         $component->call('register');
 
-        $component->assertRedirect(route('dashboard', absolute: false));
+        $component->assertRedirect(route('login', absolute: false));
 
-        $this->assertAuthenticated();
+        $this->assertGuest();
+
+        $user = User::where('email', 'test@example.com')->firstOrFail();
+
+        $this->assertTrue($user->hasRole('User'));
     }
 }

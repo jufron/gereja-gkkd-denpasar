@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Spatie\Activitylog\Models\Activity;
@@ -12,11 +13,19 @@ class SettingsAndActivityLogTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(RolePermissionSeeder::class);
+    }
+
     public function test_settings_page_is_displayed(): void
     {
         $user = User::factory()->create();
+        $user->assignRole('Administrator');
 
-        $response = $this->actingAs($user)->get('/pengaturan');
+        $response = $this->actingAs($user)->get('/admin/pengaturan');
 
         $response->assertOk()->assertSee('Pengaturan');
     }
@@ -24,8 +33,9 @@ class SettingsAndActivityLogTest extends TestCase
     public function test_activity_log_page_is_displayed(): void
     {
         $user = User::factory()->create();
+        $user->assignRole('Administrator');
 
-        $response = $this->actingAs($user)->get('/log-aktivitas');
+        $response = $this->actingAs($user)->get('/admin/log-aktivitas');
 
         $response->assertOk()->assertSee('Log Aktivitas');
     }
@@ -53,7 +63,7 @@ class SettingsAndActivityLogTest extends TestCase
 
     public function test_activity_log_page_is_guest_protected(): void
     {
-        $response = $this->get('/log-aktivitas');
+        $response = $this->get('/admin/log-aktivitas');
 
         $response->assertRedirect('/login');
     }

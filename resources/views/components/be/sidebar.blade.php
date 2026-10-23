@@ -7,23 +7,23 @@
         [
             'label' => 'Ringkasan',
             'items' => [
-                ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'fa-chart-pie'],
-                ['label' => 'Data Jemaat', 'route' => 'table', 'icon' => 'fa-users'],
+                ['label' => 'Dashboard', 'route' => 'admin.index', 'icon' => 'fa-chart-pie'],
+                ['label' => 'Data Jemaat', 'route' => null, 'icon' => 'fa-users'],
                 ['label' => 'Pelayanan & Volunteer', 'route' => null, 'icon' => 'fa-hand-holding-heart'],
             ],
         ],
         [
             'label' => 'Ibadah & Agenda',
             'items' => [
-                ['label' => 'Jadwal pertemuan & Ibadah', 'route' => 'jadwal', 'icon' => 'fa-calendar-days'],
+                ['label' => 'Jadwal pertemuan & Ibadah', 'route' => 'admin.jadwal-ibadah-dan-pelayanan', 'icon' => 'fa-calendar-days'],
                 ['label' => 'Keuangan & Persembahan', 'route' => null, 'icon' => 'fa-coins'],
             ],
         ],
         [
             'label' => 'User Management',
             'items' => [
-                ['label' => 'All User', 'route' => 'all-user', 'icon' => 'fa-users'],
-                ['label' => 'Hak Akses', 'route' => 'hak-akses', 'icon' => 'fa-user-shield'],
+                ['label' => 'All User', 'route' => 'admin.all-user', 'icon' => 'fa-users'],
+                ['label' => 'Hak Akses', 'route' => 'admin.hak-akses', 'icon' => 'fa-user-shield'],
             ],
         ],
         [
@@ -36,8 +36,8 @@
         [
             'label' => 'Aplikasi Management',
             'items' => [
-                ['label' => 'Pengaturan', 'route' => 'pengaturan', 'icon' => 'fa-sliders'],
-                ['label' => 'Log Aktivitas', 'route' => 'log-aktivitas', 'icon' => 'fa-clock-rotate-left'],
+                ['label' => 'Pengaturan', 'route' => 'admin.pengaturan', 'icon' => 'fa-sliders'],
+                ['label' => 'Log Aktivitas', 'route' => 'admin.log-aktivitas', 'icon' => 'fa-clock-rotate-left'],
             ],
         ],
     ];

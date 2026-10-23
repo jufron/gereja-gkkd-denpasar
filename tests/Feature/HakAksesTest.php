@@ -28,7 +28,7 @@ class HakAksesTest extends TestCase
     public function test_halaman_dapat_diakses_oleh_administrator(): void
     {
         $this->actingAs($this->admin)
-            ->get(route('hak-akses'))
+            ->get(route('admin.hak-akses'))
             ->assertOk()
             ->assertSeeText('Daftar Role');
     }
@@ -36,10 +36,10 @@ class HakAksesTest extends TestCase
     public function test_halaman_ditolak_untuk_user_bukan_administrator(): void
     {
         $user = User::factory()->create();
-        $user->assignRole('Staff');
+        $user->assignRole('Bendahara');
 
         $this->actingAs($user)
-            ->get(route('hak-akses'))
+            ->get(route('admin.hak-akses'))
             ->assertForbidden();
     }
 
@@ -49,7 +49,7 @@ class HakAksesTest extends TestCase
         $role->revokePermissionTo('Hak Akses');
 
         $this->actingAs($this->admin)
-            ->get(route('hak-akses'))
+            ->get(route('admin.hak-akses'))
             ->assertOk();
     }
 
