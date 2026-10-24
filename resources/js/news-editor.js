@@ -34,7 +34,7 @@ window.Alpine.data('newsForm', () => ({
     },
 
     /**
-     * Inisialisasi Quill editor.
+        // Inisialisasi Quill editor.
      * Dipanggil sekali dari x-init di view form berita.
      */
     initQuill() {
@@ -117,7 +117,11 @@ window.Alpine.data('newsForm', () => ({
         const formData = new FormData();
         formData.append('upload', file);
 
-        const res = await fetch('/dashboard/admin/berita/upload-gambar', {
+        const uploadUrl = this.$root?.dataset?.uploadUrl ||
+            document.querySelector('[data-upload-url]')?.dataset?.uploadUrl ||
+            '/dashboard/admin/berita/upload-gambar';
+
+        const res = await fetch(uploadUrl, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',

@@ -22,6 +22,7 @@
               enctype="multipart/form-data"
               x-data="newsForm()"
               x-init="initQuill()"
+              :data-upload-url="route('admin.berita.upload-gambar')"
               @submit="loading = true; $el.submit()">
 
             @if ($isEdit)
@@ -29,8 +30,11 @@
             @endif
             @csrf
 
-            {{-- Quill toolbar (di-reference dari JS via #quill-toolbar) --}}
-            <div id="quill-toolbar" class="hidden">
+            {{-- Quill toolbar (referenced by JS via #quill-toolbar).
+                  Not hidden — Quill needs it visible to compute layout and
+                  attach button event handlers. --}}
+            <div id="quill-toolbar"
+                 class="mb-2 flex flex-wrap items-center gap-1 rounded-t-xl border border-slate-300 bg-slate-50 px-3 py-1 dark:border-slate-600 dark:bg-slate-800">
                 <span class="ql-formats">
                     <select class="ql-header">
                         <option selected></option>
@@ -40,21 +44,21 @@
                     </select>
                 </span>
                 <span class="ql-formats">
-                    <button class="ql-bold"></button>
-                    <button class="ql-italic"></button>
-                    <button class="ql-underline"></button>
-                    <button class="ql-strike"></button>
+                    <button type="button" class="ql-bold"></button>
+                    <button type="button" class="ql-italic"></button>
+                    <button type="button" class="ql-underline"></button>
+                    <button type="button" class="ql-strike"></button>
                 </span>
                 <span class="ql-formats">
-                    <button class="ql-list" value="ordered"></button>
-                    <button class="ql-list" value="bullet"></button>
-                    <button class="ql-blockquote"></button>
-                    <button class="ql-code-block"></button>
+                    <button type="button" class="ql-list" value="ordered"></button>
+                    <button type="button" class="ql-list" value="bullet"></button>
+                    <button type="button" class="ql-blockquote"></button>
+                    <button type="button" class="ql-code-block"></button>
                 </span>
                 <span class="ql-formats">
-                    <button class="ql-link"></button>
-                    <button class="ql-image"></button>
-                    <button class="ql-clean"></button>
+                    <button type="button" class="ql-link"></button>
+                    <button type="button" class="ql-image"></button>
+                    <button type="button" class="ql-clean"></button>
                 </span>
             </div>
 
@@ -97,8 +101,9 @@
                         {{-- Input hidden yang disinkronkan oleh Quill --}}
                         <input type="hidden" name="content" x-ref="contentInput"
                                value="{{ old('content', $news->content) }}">
-                        <div x-ref="quillEl"
-                             class="min-h-[300px] rounded-xl border border-slate-300 dark:border-slate-600">
+                        <div x-data
+                             x-ref="quillEl"
+                             class="quill-content">
                         </div>
                     </div>
                 </div>
