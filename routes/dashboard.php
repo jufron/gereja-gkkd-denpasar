@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('dashboard')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
-    Route::prefix('profile')->controller(ProfileController::class)->group( function () {
+    Route::prefix('profile')->controller(ProfileController::class)->group(function () {
         Route::get('/', 'edit')->name('dashboard.profile');
         Route::put('/', 'update')->name('dashboard.profile.update');
     });
@@ -43,6 +43,9 @@ Route::prefix('dashboard')->group(function () {
         Route::view('jadwal-pelayanan-dan-ibadah', 'dashboard.jadwal')->middleware('permission:Kelola Jadwal')->name('jadwal-ibadah-dan-pelayanan');
         // todo all user
         Route::get('all-user', [UserController::class, 'index'])->name('all-user');
+
+        // Berita Management.
+        Route::view('kategori-berita', 'dashboard.kategori-berita')->middleware('permission:Kelola Berita')->name('kategori-berita');
     });
 
     // Area Tim Pelayanan.

@@ -29,8 +29,10 @@
         [
             'label' => 'Berita Management',
             'items' => [
-                ['label' => 'Berita', 'route' => null, 'icon' => 'fa-newspaper'],
-                ['label' => 'Kategori Berita', 'route' => null, 'icon' => 'fa-tags'],
+                // Modul artikel berita belum ada; tautan "Berita" menuju halaman yang
+                // sama, jadi status aktifnya dipaksa false agar tidak ikut menyala.
+                ['label' => 'Berita', 'route' => 'admin.kategori-berita', 'icon' => 'fa-newspaper', 'active' => false],
+                ['label' => 'Kategori Berita', 'route' => 'admin.kategori-berita', 'icon' => 'fa-tags'],
             ],
         ],
         [
@@ -82,7 +84,8 @@
                 @foreach ($group['items'] as $item)
                     @php
                         $href = $item['route'] && Route::has($item['route']) ? route($item['route']) : '#';
-                        $isActive = $item['route'] && request()->routeIs($item['route']);
+                        // Item boleh memaksa status aktif lewat 'active' => false (mis. tautan duplikat).
+                        $isActive = ($item['active'] ?? true) && $item['route'] && request()->routeIs($item['route']);
                     @endphp
 
                     <a
