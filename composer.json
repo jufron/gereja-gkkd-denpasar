@@ -12,6 +12,7 @@
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^3.6.4",
         "livewire/volt": "^1.7.0",
+        "mckenziearts/laravel-notify": "^3.2",
         "mews/purifier": "^3.4",
         "power-components/livewire-powergrid": "^6.11",
         "spatie/laravel-activitylog": "*",

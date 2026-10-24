@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Dashboard\BeritaController;
-use App\Http\Controllers\Dashboard\BeritaFormController;
 use App\Http\Controllers\Dashboard\NewsImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -22,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('dashboard')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
+
     Route::prefix('profile')->controller(ProfileController::class)->group(function () {
         Route::get('/', 'edit')->name('dashboard.profile');
         Route::put('/', 'update')->name('dashboard.profile.update');
@@ -53,12 +53,16 @@ Route::prefix('dashboard')->group(function () {
         // Berita Management.
         Route::middleware('permission:Kelola Berita')->group(function () {
             Route::post('berita/upload-gambar', NewsImageController::class)->name('berita.upload-gambar');
-            Route::get('berita', [BeritaController::class, 'index'])->name('berita');
-            Route::get('berita/tambah', [BeritaFormController::class, 'create'])->name('berita.tambah');
-            Route::post('berita', [BeritaFormController::class, 'store'])->name('berita.simpan');
-            Route::get('berita/{news}/ubah', [BeritaFormController::class, 'edit'])->name('berita.ubah');
-            Route::put('berita/{news}', [BeritaFormController::class, 'update'])->name('berita.update');
-            Route::delete('berita/{news}', [BeritaFormController::class, 'destroy'])->name('berita.hapus');
+
+            Route::controller(BeritaController::class)->group(function () {
+                Route::get('berita', 'index')->name('berita');
+                Route::get('berita/tambah', 'create')->name('berita.tambah');
+                Route::post('berita', 'store')->name('berita.simpan');
+                Route::get('berita/{news}', 'show')->name('berita.lihat');
+                Route::get('berita/{news}/ubah', 'edit')->name('berita.ubah');
+                Route::put('berita/{news}', 'update')->name('berita.update');
+                Route::delete('berita/{news}', 'destroy')->name('berita.hapus');
+            });
         });
     });
 
@@ -67,7 +71,7 @@ Route::prefix('dashboard')->group(function () {
         // ponytail: pakai view overview sementara; ganti view khusus saat konten tim pelayanan jelas.
         Route::get('/', fn () => view('dashboard.index'))->name('index');
         Route::view('jadwal-pelayanan-dan-ibadah', 'dashboard.jadwal')->name('jadwal-ibadah-dan-pelayanan');
-        Route::get('profile', [ProfileController::class, 'edit'])->name('profile');
-        Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+        // Route::get('profile', [ProfileController::class, 'edit'])->name('profile');
+        // Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     });
 });

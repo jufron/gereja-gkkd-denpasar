@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Contracts\Services\HomeContentServiceInterface;
+use App\Contracts\Services\NewsManagementServiceInterface;
 use App\Contracts\Services\NewsServiceInterface;
 use App\Services\HomeContentService;
+use App\Services\NewsManagementService;
 use App\Services\NewsService;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,5 +20,6 @@ class ApplicationServiceProvider extends ServiceProvider
     public array $singletons = [
         HomeContentServiceInterface::class => HomeContentService::class,
         NewsServiceInterface::class => NewsService::class,
+        NewsManagementServiceInterface::class => NewsManagementService::class,
     ];
 }

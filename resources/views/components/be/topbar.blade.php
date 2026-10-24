@@ -32,7 +32,10 @@
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-muted"></i>
             <input
                 type="text"
+                name="search"
+                id="dashboard-search"
                 placeholder="Cari jemaat, warta, kegiatan..."
+                aria-label="Cari"
                 class="h-9 w-full rounded-xl border border-transparent bg-ink/5 pl-9 pr-4 text-xs text-ink placeholder:text-muted focus:border-accent focus:bg-card focus:outline-none transition-all"
             >
         </div>

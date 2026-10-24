@@ -39,7 +39,11 @@ window.Alpine.data('newsForm', () => ({
      */
     initQuill() {
         const el = this.$refs.quillEl;
-        if (!el || el.__quill) return; // sudah inisialisasi
+        if (!el) {
+            console.warn('newsForm: $refs.quillEl tidak ditemukan — cek scope x-data/x-ref di berita-form.');
+            return;
+        }
+        if (el.__quill) return; // sudah inisialisasi
 
         const quill = new Quill(el, {
             modules: {
@@ -93,10 +97,36 @@ window.Alpine.data('newsForm', () => ({
             };
         });
 
-        // Inisialisasi teks dari input hidden (saat edit)
+        // 3. Ubah lebar gambar via dropdown "Ukuran gambar".
+        // Select ini sengaja TIDAK memakai kelas `ql-*` supaya Quill tidak
+        // mencoba me-bind ke format yang tidak ada; kita pasang listener sendiri.
+        const widthSelect = this.$root.querySelector('.image-width-select');
+        if (widthSelect) {
+            widthSelect.addEventListener('change', () => {
+                const value = widthSelect.value;
+                widthSelect.value = '';
+
+                if (!value) return;
+
+                const sel = quill.getSelection();
+                if (!sel || sel.length > 0) return;
+
+                const blot = quill.getLeaf(sel.index);
+                if (!blot || !blot[0] || blot[0].domNode.tagName !== 'IMG') return;
+
+                blot[0].domNode.setAttribute('width', value);
+                // Tandai sebagai perubahan user supaya sinkron ke input hidden.
+                quill.update('user');
+                quill.setSelection(sel.index);
+            });
+        }
+
+        // Inisialisasi teks dari input hidden (saat edit).
+        // Quill 2: pakai setContents + clipboard.convert (dangerouslySetHTML
+        // hanya ada di Quill 1).
         const existing = this.$refs.contentInput.value || '';
         if (existing) {
-            quill.clipboard.dangerouslySetHTML(existing, 'user');
+            quill.setContents(quill.clipboard.convert({ html: existing }), 'silent');
         }
     },
 

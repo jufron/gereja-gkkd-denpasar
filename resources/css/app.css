@@ -4,6 +4,7 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../../app/Livewire/*Table.php';
+@source '../../app/Livewire/Dashboard/*.php';
 @source '../../vendor/power-components/livewire-powergrid/src/Themes/Tailwind.php';
 @source '../../vendor/power-components/livewire-powergrid/resources/views/**/*.php';
 
@@ -403,11 +404,77 @@
 }
 
 /*
+ * Artikel berita ter-santasi (view pratinjau/berita-show).
+ * Ringan, tanpa plugin typography — cukup untuk konten Quill yang dihasilkan
+ * editor (heading, list, img, blockquote, link, code).
+ */
+.berita-content {
+    color: var(--color-ink);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    overflow-wrap: break-word;
+}
+
+.berita-content > * + * {
+    margin-top: 1rem;
+}
+
+.berita-content h1,
+.berita-content h2,
+.berita-content h3,
+.berita-content h4 {
+    color: var(--color-ink);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.berita-content h1 { font-size: 1.5rem; }
+.berita-content h2 { font-size: 1.25rem; }
+.berita-content h3 { font-size: 1.125rem; }
+.berita-content h4 { font-size: 1rem; }
+
+.berita-content ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+}
+
+.berita-content ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+}
+
+.berita-content img {
+    border-radius: 0.75rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.berita-content blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+.berita-content a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.berita-content code {
+    background-color: color-mix(in srgb, var(--color-ink) 6%, transparent);
+    border-radius: 0.375rem;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.85em;
+}
+
+/*
  * Quill snow editor. Override default snow colors so the toolbar and editable
  * area blend into the dashboard surface in both light and dark modes.
  * Only targets the news editor (quill-content) to avoid leaking global styles.
  */
-.quill-content.ql-snow .ql-toolbar {
+.quill-content .ql-toolbar {
     border: 0;
     border-bottom: 1px solid var(--color-line);
     background-color: var(--color-card);
@@ -415,7 +482,7 @@
     border-radius: 0.75rem 0.75rem 0 0;
 }
 
-.quill-content.ql-snow .ql-container {
+.quill-content .ql-container {
     min-height: 280px;
     border: 1px solid var(--color-line);
     border-top: 0;
@@ -423,35 +490,43 @@
     background-color: var(--color-card);
 }
 
-.quill-content.ql-snow .ql-editor {
+.quill-content .ql-editor {
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-size: 0.875rem;
     line-height: 1.5rem;
 }
 
-.quill-content.ql-snow .ql-editor.ql-blank::before {
+/* Gambar di dalam editor: jangan meluber dari kolom; tetap bisa diubah lebar
+   via atribut width (dropdown "Ukuran gambar"). */
+.quill-content .ql-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+}
+
+.quill-content .ql-editor.ql-blank::before {
     color: var(--color-muted);
 }
 
-.quill-content.ql-snow .ql-stroke {
+.quill-content .ql-stroke {
     stroke: var(--color-muted);
     fill: var(--color-muted);
 }
 
-.quill-content.ql-snow .ql-fill {
+.quill-content .ql-fill {
     fill: var(--color-muted);
 }
 
-.quill-content.ql-snow .ql-toolbar button:hover .ql-stroke,
-.quill-content.ql-snow .ql-toolbar button:hover .ql-fill,
-.quill-content.ql-snow .ql-toolbar .ql-active .ql-stroke,
-.quill-content.ql-snow .ql-toolbar .ql-active .ql-fill {
+.quill-content .ql-toolbar button:hover .ql-stroke,
+.quill-content .ql-toolbar button:hover .ql-fill,
+.quill-content .ql-toolbar .ql-active .ql-stroke,
+.quill-content .ql-toolbar .ql-active .ql-fill {
     stroke: var(--color-accent);
     fill: var(--color-accent);
 }
 
-.quill-content.ql-snow .ql-tooltip {
+.quill-content .ql-tooltip {
     background-color: var(--color-card);
     color: var(--color-ink);
     border: 1px solid var(--color-line);

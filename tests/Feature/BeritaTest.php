@@ -2,12 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Contracts\Services\NewsManagementServiceInterface;
+use App\Livewire\Dashboard\BeritaTable;
 use App\Models\News;
 use App\Models\NewsCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class BeritaTest extends TestCase
@@ -134,5 +137,94 @@ class BeritaTest extends TestCase
         // create lagi dengan judul sama → slug jadi judul-sama-2
         $slug = News::uniqueSlug('Judul Sama');
         $this->assertSame('judul-sama-2', $slug);
+    }
+
+    public function test_halaman_lihat_berita_dapat_diakses(): void
+    {
+        $berita = News::create([
+            'title' => 'Berita Pratinjau',
+            'slug' => 'berita-pratinjau',
+            'content' => '<p>Isi artikel</p>',
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->get(route('admin.berita.lihat', $berita))->assertOk()
+            ->assertSee('Berita Pratinjau');
+    }
+
+    public function test_toggle_status_draft_ke_published_mengisi_tanggal(): void
+    {
+        $berita = News::create([
+            'title' => 'Berita Toggle',
+            'slug' => 'berita-toggle',
+            'content' => '<p>x</p>',
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        Livewire::test(BeritaTable::class)
+            ->call('toggleStatus', $berita->id)
+            ->assertSet('pesan', 'Berita diterbitkan.');
+
+        $berita->refresh();
+        $this->assertSame('published', $berita->status);
+        $this->assertNotNull($berita->published_at);
+    }
+
+    public function test_toggle_status_published_ke_draft_mengosongkan_tanggal(): void
+    {
+        $berita = News::create([
+            'title' => 'Berita Toggle 2',
+            'slug' => 'berita-toggle-2',
+            'content' => '<p>x</p>',
+            'user_id' => $this->admin->id,
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        Livewire::test(BeritaTable::class)
+            ->call('toggleStatus', $berita->id)
+            ->assertSet('pesan', 'Berita dijadikan draft.');
+
+        $berita->refresh();
+        $this->assertSame('draft', $berita->status);
+        $this->assertNull($berita->published_at);
+    }
+
+    public function test_statistik_berita_per_status(): void
+    {
+        // Bersihkan cache statistik (bisa terisi test sebelumnya — array cache
+        // bertahan antar-test dalam satu proses).
+        \Illuminate\Support\Facades\Cache::flush();
+
+        News::create(['title' => 'A', 'slug' => 'a', 'content' => '<p>x</p>', 'user_id' => $this->admin->id, 'status' => 'published', 'published_at' => now()]);
+        News::create(['title' => 'B', 'slug' => 'b', 'content' => '<p>x</p>', 'user_id' => $this->admin->id, 'status' => 'draft']);
+
+        $service = app(NewsManagementServiceInterface::class);
+        $statistik = $service->statistics();
+
+        $this->assertSame(2, $statistik['total']);
+        $this->assertSame(1, $statistik['published']);
+        $this->assertSame(1, $statistik['draft']);
+    }
+
+    public function test_hapus_berita_melalui_komponen(): void
+    {
+        $berita = News::create([
+            'title' => 'Berita Dihapus',
+            'slug' => 'berita-dihapus',
+            'content' => '<p>x</p>',
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        Livewire::test(BeritaTable::class)
+            ->call('bukaKonfirmasiHapus', $berita->id)
+            ->assertSet('hapusOpen', true)
+            ->call('hapus')
+            ->assertSet('pesan', 'Berita berhasil dihapus.');
+
+        $this->assertDatabaseMissing('news', ['id' => $berita->id]);
     }
 }
