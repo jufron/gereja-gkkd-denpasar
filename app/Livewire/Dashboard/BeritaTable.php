@@ -36,6 +36,12 @@ final class BeritaTable extends Component
     /** State modal konfirmasi hapus (di-entangle ke Alpine). */
     public bool $hapusOpen = false;
 
+    /** Pesan notifikasi inline (dipakai blade, konsisten dengan test). */
+    public ?string $pesan = null;
+
+    /** Tone notifikasi inline: 'success' | 'error'. */
+    public string $pesanTone = 'success';
+
     /** Batasi halaman hanya untuk pemilik permission "Kelola Berita". */
     public function mount(): void
     {
@@ -92,6 +98,12 @@ final class BeritaTable extends Component
             ->title($news->status === 'published' ? 'Berita Diterbitkan' : 'Berita Dijadikan Draft')
             ->send();
 
+        // Notifikasi inline untuk konsistensi blade + test.
+        $this->pesan = $news->status === 'published'
+            ? 'Berita diterbitkan.'
+            : 'Berita dijadikan draft.';
+        $this->pesanTone = 'success';
+
         unset($this->berita, $this->statistik);
     }
 
@@ -111,12 +123,12 @@ final class BeritaTable extends Component
 
         $this->newsService()->delete($news);
 
-        activity('berita')->withProperties(['judul' => $news->title])->log('Hapus berita');
-
         unset($this->berita, $this->statistik, $this->hapusId, $this->hapusJudul);
 
         $this->hapusOpen = false;
         notify()->success()->title('Berita Dihapus')->send();
+        $this->pesan = 'Berita berhasil dihapus.';
+        $this->pesanTone = 'success';
     }
 
     public function render()

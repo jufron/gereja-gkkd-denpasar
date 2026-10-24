@@ -107,7 +107,7 @@
                             ];
                             $icon = $icons[$activity->description] ?? 'fa-clock-rotate-left';
 
-                            $hasChanges = filled($activity->properties['old'] ?? null) || filled($activity->properties['attributes'] ?? null);
+                            $hasChanges = filled($activity->attribute_changes['old'] ?? null) || filled($activity->attribute_changes['attributes'] ?? null);
                         @endphp
 
                         <div class="flex items-start gap-4 p-5">
@@ -124,7 +124,7 @@
                                     </span>
                                     @if ($activity->subject)
                                         <span class="text-xs text-muted">
-                                            pada {{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}
+                                            pada {{ $activity->subject->title ?? $activity->subject->name ?? (class_basename($activity->subject_type).' #'.$activity->subject_id) }}
                                         </span>
                                     @endif
                                 </div>
@@ -151,9 +151,9 @@
                                             </thead>
                                             <tbody class="divide-y divide-line">
                                                 @php
-                                                    $old = $activity->properties['old'] ?? [];
-                                    $new = $activity->properties['attributes'] ?? $activity->properties->toArray();
-                                    $keys = collect(array_keys($new))->merge(array_keys($old))->unique();
+                                                    $old = $activity->attribute_changes['old'] ?? [];
+                                                    $new = $activity->attribute_changes['attributes'] ?? [];
+                                                    $keys = collect(array_keys($new))->merge(array_keys($old))->unique();
                                                 @endphp
                                                 @foreach ($keys as $key)
                                                     <tr>

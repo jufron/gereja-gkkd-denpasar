@@ -151,8 +151,9 @@
                         </div>
 
                         @unless ($device['current'])
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('dashboard.profile.session.destroy', $device['token']) }}">
                                 @csrf
+                                @method('DELETE')
                                 <button type="submit" class="be-btn be-btn-ghost border border-danger/30 text-danger hover:bg-danger/10">
                                     <i class="fa-solid fa-right-from-bracket text-[11px]"></i> Akhiri Sesi
                                 </button>

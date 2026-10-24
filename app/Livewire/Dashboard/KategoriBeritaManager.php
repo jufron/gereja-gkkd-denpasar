@@ -205,19 +205,9 @@ final class KategoriBeritaManager extends Component
             $category = NewsCategory::findOrFail($this->kategoriId);
             $category->update($payload);
 
-            activity('berita')
-                ->on($category)
-                ->withProperties(['nama' => $nama])
-                ->log('Ubah kategori berita');
-
             $this->setPesan('Kategori berita berhasil diperbarui.', 'success');
         } else {
             $category = NewsCategory::create($payload);
-
-            activity('berita')
-                ->on($category)
-                ->withProperties(['nama' => $nama])
-                ->log('Tambah kategori berita');
 
             $this->setPesan('Kategori berita baru berhasil ditambahkan.', 'success');
         }
@@ -235,11 +225,6 @@ final class KategoriBeritaManager extends Component
         $category = NewsCategory::findOrFail($kategoriId);
         $category->update(['is_active' => ! $category->is_active]);
 
-        activity('berita')
-            ->on($category)
-            ->withProperties(['nama' => $category->name, 'aktif' => $category->is_active])
-            ->log('Ubah status kategori berita');
-
         unset($this->categories, $this->statistik);
     }
 
@@ -254,11 +239,8 @@ final class KategoriBeritaManager extends Component
     public function hapus(): void
     {
         $category = NewsCategory::findOrFail($this->hapusId);
-        $nama = $category->name;
 
         $category->delete();
-
-        activity('berita')->withProperties(['nama' => $nama])->log('Hapus kategori berita');
 
         if ($this->kategoriId === (int) $category->id) {
             $this->kategoriId = null;

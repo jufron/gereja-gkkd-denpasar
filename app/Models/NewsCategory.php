@@ -6,11 +6,28 @@ use Database\Factories\NewsCategoryFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class NewsCategory extends Model
 {
     /** @use HasFactory<NewsCategoryFactory> */
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'slug', 'color', 'description', 'sort_order', 'is_active'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'Tambah kategori berita',
+                'updated' => 'Ubah kategori berita',
+                'deleted' => 'Hapus kategori berita',
+                default => "Kategori berita {$eventName}",
+            })
+            ->useLogName('berita');
+    }
 
     /**
      * The attributes that are mass assignable.
