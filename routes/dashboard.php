@@ -67,6 +67,13 @@ Route::prefix('dashboard')->group(function () {
                 Route::delete('berita/{news}', 'destroy')->name('berita.hapus');
             });
         });
+
+        // Keuangan: kas masuk / kas keluar / kategori.
+        Route::prefix('keuangan')->name('keuangan.')->middleware('permission:Kelola Keuangan')->group(function () {
+            Route::view('kas-masuk', 'dashboard.keuangan-kas', ['tipe' => 'income'])->name('masuk');
+            Route::view('kas-keluar', 'dashboard.keuangan-kas', ['tipe' => 'expense'])->name('keluar');
+            Route::view('kategori', 'dashboard.keuangan-kategori')->name('kategori');
+        });
     });
 
     // Area Tim Pelayanan.

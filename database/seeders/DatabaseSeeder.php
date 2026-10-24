@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             BadgeSeeder::class,
             ScheduleSeeder::class,
             NewsCategorySeeder::class,
+            FinanceCategorySeeder::class,
+            FinanceTransactionSeeder::class,
         ]);
     }
 }

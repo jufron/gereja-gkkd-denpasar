@@ -16,7 +16,14 @@
             'label' => 'Ibadah & Agenda',
             'items' => [
                 ['label' => 'Jadwal pertemuan & Ibadah', 'route' => 'admin.jadwal-ibadah-dan-pelayanan', 'icon' => 'fa-calendar-days'],
-                ['label' => 'Keuangan & Persembahan', 'route' => null, 'icon' => 'fa-coins'],
+            ],
+        ],
+        [
+            'label' => 'Keuangan Management',
+            'items' => [
+                ['label' => 'Kas Masuk', 'route' => 'admin.keuangan.masuk', 'icon' => 'fa-sack-dollar'],
+                ['label' => 'Kas Keluar', 'route' => 'admin.keuangan.keluar', 'icon' => 'fa-money-bill-transfer'],
+                ['label' => 'Kategori Keuangan', 'route' => 'admin.keuangan.kategori', 'icon' => 'fa-coins'],
             ],
         ],
         [
