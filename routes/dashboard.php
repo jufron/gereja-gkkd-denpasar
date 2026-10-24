@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\Dashboard\BeritaController;
+use App\Http\Controllers\Dashboard\BeritaFormController;
+use App\Http\Controllers\Dashboard\NewsImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -46,6 +49,17 @@ Route::prefix('dashboard')->group(function () {
 
         // Berita Management.
         Route::view('kategori-berita', 'dashboard.kategori-berita')->middleware('permission:Kelola Berita')->name('kategori-berita');
+
+        // Berita Management.
+        Route::middleware('permission:Kelola Berita')->group(function () {
+            Route::post('berita/upload-gambar', NewsImageController::class)->name('berita.upload-gambar');
+            Route::get('berita', [BeritaController::class, 'index'])->name('berita');
+            Route::get('berita/tambah', [BeritaFormController::class, 'create'])->name('berita.tambah');
+            Route::post('berita', [BeritaFormController::class, 'store'])->name('berita.simpan');
+            Route::get('berita/{news}/ubah', [BeritaFormController::class, 'edit'])->name('berita.ubah');
+            Route::put('berita/{news}', [BeritaFormController::class, 'update'])->name('berita.update');
+            Route::delete('berita/{news}', [BeritaFormController::class, 'destroy'])->name('berita.hapus');
+        });
     });
 
     // Area Tim Pelayanan.

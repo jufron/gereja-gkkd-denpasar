@@ -29,9 +29,7 @@
         [
             'label' => 'Berita Management',
             'items' => [
-                // Modul artikel berita belum ada; tautan "Berita" menuju halaman yang
-                // sama, jadi status aktifnya dipaksa false agar tidak ikut menyala.
-                ['label' => 'Berita', 'route' => 'admin.kategori-berita', 'icon' => 'fa-newspaper', 'active' => false],
+                ['label' => 'Berita', 'route' => 'admin.berita', 'icon' => 'fa-newspaper'],
                 ['label' => 'Kategori Berita', 'route' => 'admin.kategori-berita', 'icon' => 'fa-tags'],
             ],
         ],

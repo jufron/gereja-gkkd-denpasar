@@ -53,4 +53,9 @@ class NewsCategory extends Model
     {
         return $query->orderBy('sort_order')->orderBy('name');
     }
+
+    public function news()
+    {
+        return $this->hasMany(News::class);
+    }
 }
