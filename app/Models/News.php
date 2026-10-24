@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Database\Factories\NewsFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * Ponytail: belum ada factory — pakai create langsung di test sekolah.
@@ -14,11 +17,26 @@ use Illuminate\Support\Str;
  */
 class News extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected static function newFactory(): NewsFactory
     {
         return NewsFactory::new();
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'slug', 'status', 'published_at', 'news_category_id', 'user_id'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'Tambah berita',
+                'updated' => 'Ubah berita',
+                'deleted' => 'Hapus berita',
+                default => "Berita {$eventName}",
+            })
+            ->useLogName('berita');
     }
 
     protected $fillable = [
@@ -28,7 +46,6 @@ class News extends Model
         'slug',
         'excerpt',
         'content',
-        'featured_image',
         'status',
         'published_at',
     ];
@@ -46,6 +63,21 @@ class News extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function mediaUsages()
+    {
+        return $this->hasMany(AssetUsage::class);
+    }
+
+    /**
+     * URL banner artikel dari media library (koleksi news-banner).
+     */
+    protected function bannerUrl(): Attribute
+    {
+        return Attribute::get(fn () => $this->mediaUsages
+            ->firstWhere('kind', 'banner')
+            ?->media?->getUrl());
     }
 
     public function scopePublished(Builder $query): Builder

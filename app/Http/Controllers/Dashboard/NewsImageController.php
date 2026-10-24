@@ -3,24 +3,30 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssetLibrary;
 use Illuminate\Http\Request;
 
 /**
  * Handler upload gambar inline di dalam editor Quill.
- * File disimpan ke disk "public" (folder news/content) sehingga
- * tidak ada base64 yang bocor ke database.
- * Akses: role admin + permission "Kelola Berita".
+ * File disimpan ke media library (koleksi news-content), pemilik AssetLibrary.
+ * URL publik dihasilkan dari disk media (lokal / R2).
+ * Akses: role admin + permission "Kelola Berita" (via route middleware).
  */
 final class NewsImageController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $path = $request->validate([
+        $data = $request->validate([
             'upload' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
-        ])['upload']->store('news/content', 'public');
+        ]);
+
+        $media = AssetLibrary::singleton()
+            ->addMedia($data['upload'])
+            ->toMediaCollection('news-content');
 
         return response()->json([
-            'url' => '/storage/'.$path,
+            'url' => $media->getUrl(),
+            'id' => $media->id,
         ]);
     }
 }

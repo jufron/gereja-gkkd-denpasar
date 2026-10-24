@@ -20,6 +20,12 @@ window.Alpine.data('newsForm', () => ({
     loading: false,
     previewUrl: null,
     hapusBanner: false,
+    mediaOpen: false,
+    mediaList: [],
+    mediaLoading: false,
+    mediaPage: 1,
+    mediaLastPage: 1,
+    mediaQuery: '',
 
     /** Dipanggil saat file banner dipilih di input <input type="file">. */
     bacaBanner(event) {
@@ -31,6 +37,51 @@ window.Alpine.data('newsForm', () => ({
             this.previewUrl = e.target.result;
         };
         reader.readAsDataURL(file);
+    },
+
+    /** Buka modal pustaka media & muat daftar. */
+    async openMedia() {
+        this.mediaOpen = true;
+        await this.loadMedia();
+    },
+
+    async loadMedia() {
+        this.mediaLoading = true;
+        try {
+            const mediaUrl = this.$root?.dataset?.mediaUrl
+                || document.querySelector('[data-media-url]')?.dataset?.mediaUrl
+                || '/dashboard/admin/media';
+            const res = await fetch(`${mediaUrl}?q=${encodeURIComponent(this.mediaQuery)}&page=${this.mediaPage}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            });
+            if (!res.ok) throw new Error('Gagal memuat pustaka media');
+            const data = await res.json();
+            this.mediaList = data.media.data;
+            this.mediaLastPage = data.media.last_page;
+        } finally {
+            this.mediaLoading = false;
+        }
+    },
+
+    mediaBuka(side) {
+        if (side === 'next' && this.mediaPage < this.mediaLastPage) {
+            this.mediaPage++;
+        } else if (side === 'prev' && this.mediaPage > 1) {
+            this.mediaPage--;
+        } else {
+            return;
+        }
+        this.loadMedia();
+    },
+
+    /** Sisipkan gambar dari pustaka ke posisi kursor Quill. */
+    insertMedia(media) {
+        const quill = this.$refs.quillEl?.__quill;
+        if (!quill) return;
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', media.url);
+        quill.setSelection(range.index + 1);
+        this.mediaOpen = false;
     },
 
     /**

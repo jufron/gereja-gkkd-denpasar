@@ -26,8 +26,8 @@
         @endif
 
         <x-be.card class="overflow-hidden">
-            @if ($news->featured_image)
-                <img src="{{ asset('storage/'.$news->featured_image) }}" class="aspect-video w-full object-cover" alt="{{ $news->title }}">
+            @if ($news->banner_url)
+                <img src="{{ $news->banner_url }}" class="aspect-video w-full object-cover" alt="{{ $news->title }}">
             @endif
 
             <div class="p-6 lg:p-8">

@@ -117,8 +117,8 @@
                         @foreach ($this->berita as $item)
                             <tr class="transition-colors hover:bg-ink/[0.02]" wire:key="berita-{{ $item->id }}">
                                 <td class="px-6 py-4">
-                                    @if ($item->featured_image)
-                                        <img src="{{ asset('storage/'.$item->featured_image) }}"
+                                    @if ($item->banner_url)
+                                        <img src="{{ $item->banner_url }}"
                                              class="h-10 w-16 shrink-0 rounded-lg object-cover"
                                              alt="">
                                     @else

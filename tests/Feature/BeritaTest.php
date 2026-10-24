@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Contracts\Services\NewsManagementServiceInterface;
 use App\Livewire\Dashboard\BeritaTable;
+use App\Models\AssetUsage;
 use App\Models\News;
 use App\Models\NewsCategory;
 use App\Models\User;
@@ -67,8 +68,14 @@ class BeritaTest extends TestCase
         $this->assertStringNotContainsString('onerror', $berita->content);
         $this->assertStringNotContainsString('alert', $berita->content);
 
-        // File banner ada di disk
-        Storage::disk('public')->assertExists($berita->featured_image);
+        // Banner tersimpan sebagai media + tercatat pemakaiannya.
+        $this->assertDatabaseHas('asset_usages', [
+            'news_id' => $berita->id,
+            'kind' => 'banner',
+        ]);
+        $this->assertDatabaseHas('media', [
+            'collection_name' => 'news-banner',
+        ]);
     }
 
     public function test_update_berita_mengganti_banner(): void
@@ -76,7 +83,6 @@ class BeritaTest extends TestCase
         Storage::fake('public');
         $cat = NewsCategory::firstOrCreate(['slug' => 'renungan'], ['name' => 'Renungan', 'color' => '']);
 
-        // upload pertama
         $img1 = File::image('b1.jpg', 600, 400);
         $this->post(route('admin.berita.simpan'), [
             'title' => 'Berita 1',
@@ -87,9 +93,8 @@ class BeritaTest extends TestCase
         ]);
 
         $berita = News::firstOrFail();
-        $oldBanner = $berita->featured_image;
+        $oldMediaId = AssetUsage::where('news_id', $berita->id)->where('kind', 'banner')->value('media_id');
 
-        // upload kedua
         $img2 = File::image('b2.jpg', 800, 600);
         $this->put(route('admin.berita.update', $berita), [
             'title' => 'Berita 1 Updated',
@@ -99,9 +104,14 @@ class BeritaTest extends TestCase
             'status' => 'draft',
         ])->assertRedirect(route('admin.berita'));
 
-        Storage::disk('public')->assertMissing($oldBanner);
-        $berita->refresh();
-        Storage::disk('public')->assertExists($berita->featured_image);
+        // Banner baru tercatat; banner lama dilepas pemakaiannya (yatim).
+        $this->assertDatabaseMissing('asset_usages', ['media_id' => $oldMediaId]);
+        $this->assertDatabaseHas('asset_usages', [
+            'news_id' => $berita->id,
+            'kind' => 'banner',
+        ]);
+        $newMediaId = AssetUsage::where('news_id', $berita->id)->where('kind', 'banner')->value('media_id');
+        $this->assertNotSame($oldMediaId, $newMediaId);
     }
 
     public function test_endpoint_upload_gambar_menerima_png(): void
@@ -112,9 +122,11 @@ class BeritaTest extends TestCase
         $this->postJson(route('admin.berita.upload-gambar'), [
             'upload' => $img,
         ])->assertOk()
-            ->assertJsonStructure(['url']);
+            ->assertJsonStructure(['url', 'id']);
 
-        Storage::disk('public')->assertExists('news/content');
+        $this->assertDatabaseHas('media', [
+            'collection_name' => 'news-content',
+        ]);
     }
 
     public function test_endpoint_upload_gambar_menolak_file_non_image(): void

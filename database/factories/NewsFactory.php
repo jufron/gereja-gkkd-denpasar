@@ -24,7 +24,6 @@ class NewsFactory extends Factory
             'slug' => Str::slug($this->faker->sentence(6)),
             'excerpt' => $this->faker->sentence(20),
             'content' => $this->faker->paragraphs(5, true),
-            'featured_image' => null,
             'status' => 'published',
             'published_at' => now(),
         ];

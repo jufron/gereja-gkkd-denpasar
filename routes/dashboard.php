@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Dashboard\BeritaController;
+use App\Http\Controllers\Dashboard\MediaLibraryController;
 use App\Http\Controllers\Dashboard\NewsImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -25,14 +26,11 @@ Route::prefix('dashboard')->group(function () {
     Route::prefix('profile')->controller(ProfileController::class)->group(function () {
         Route::get('/', 'edit')->name('dashboard.profile');
         Route::put('/', 'update')->name('dashboard.profile.update');
+
+        // Sekuriti akun: perangkat terhubung + akhiri sesi lain.
+        Route::get('keamanan', 'security')->name('dashboard.profile.security');
+        Route::delete('sesi/{token}', 'destroySession')->name('dashboard.profile.session.destroy');
     });
-    Route::get('profile/keamanan', fn () => view('dashboard.security', [
-        // TODO: ganti array dummy ini dengan query ke tabel sessions + parse user_agent.
-        'devices' => [
-            ['browser' => 'Chrome', 'os' => 'Windows', 'type' => 'desktop', 'ip' => '192.168.1.1', 'location' => 'Denpasar, Bali', 'last_active' => 'Saat ini', 'current' => true],
-            ['browser' => 'Safari', 'os' => 'iPhone', 'type' => 'mobile', 'ip' => '192.168.1.2', 'location' => 'Denpasar, Bali', 'last_active' => '2 jam lalu', 'current' => false],
-        ],
-    ]))->name('dashboard.profile.security');
 
     // Area Administrator.
     Route::middleware('role:Administrator')->prefix('admin')->name('admin.')->group(function () {
@@ -52,7 +50,12 @@ Route::prefix('dashboard')->group(function () {
 
         // Berita Management.
         Route::middleware('permission:Kelola Berita')->group(function () {
-            Route::post('berita/upload-gambar', NewsImageController::class)->name('berita.upload-gambar');
+            Route::post('berita/upload-gambar', NewsImageController::class)
+                ->middleware('throttle:30,1')
+                ->name('berita.upload-gambar');
+
+            Route::get('media', [MediaLibraryController::class, 'index'])->name('media.index');
+            Route::delete('media/{media}', [MediaLibraryController::class, 'destroy'])->name('media.destroy');
 
             Route::controller(BeritaController::class)->group(function () {
                 Route::get('berita', 'index')->name('berita');

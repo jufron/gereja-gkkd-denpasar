@@ -31,6 +31,7 @@
               x-data="newsForm()"
               x-init="initQuill()"
               data-upload-url="{{ route('admin.berita.upload-gambar') }}"
+              data-media-url="{{ route('admin.media.index') }}"
               @submit="loading = true; $el.submit()">
 
             @if ($isEdit)
@@ -122,6 +123,10 @@
                                         <span class="ql-formats">
                                             <button type="button" class="ql-link"></button>
                                             <button type="button" class="ql-image"></button>
+                                            <button type="button" @click="openMedia()" title="Pilih dari Pustaka"
+                                                    class="be-btn be-btn-ghost px-2 py-1 text-[11px]">
+                                                <i class="fa-solid fa-folder-open"></i> Pustaka
+                                            </button>
                                             <select id="image-width" name="image_width" class="image-width-select" aria-label="Ukuran gambar" title="Ukuran gambar">
                                                 <option value="">Ukuran gambar</option>
                                                 <option value="25%">25%</option>
@@ -186,8 +191,8 @@
                         <h2 class="mb-5 text-sm font-semibold uppercase tracking-wide text-muted">Banner / Foto Utama</h2>
 
                         <div class="space-y-4">
-                            @if (! empty($news->featured_image))
-                                <img src="{{ asset('storage/'.$news->featured_image) }}"
+                            @if ($news->banner_url)
+                                <img src="{{ $news->banner_url }}"
                                      class="aspect-video w-full rounded-xl object-cover" alt="Banner saat ini">
                                 <label class="flex cursor-pointer items-center gap-2 text-sm text-ink">
                                     <input type="checkbox" name="hapus_banner" value="1" x-model="hapusBanner"
@@ -228,6 +233,63 @@
                         <span x-show="!loading">{{ $isEdit ? 'Simpan Perubahan' : 'Simpan Berita' }}</span>
                         <span x-show="loading" x-cloak>Menyimpan…</span>
                     </button>
+                </div>
+            </div>
+
+            {{-- Modal pustaka media --}}
+            <div x-show="mediaOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="mediaOpen = false">
+                <div class="absolute inset-0 bg-black/50" @click="mediaOpen = false"></div>
+                <div class="relative w-full max-w-3xl rounded-2xl bg-card shadow-2xl" @click.outside="mediaOpen = false">
+                    <div class="flex items-center justify-between border-b border-line p-5">
+                        <div>
+                            <h3 class="text-base font-bold text-ink">Pustaka Media</h3>
+                            <p class="text-xs text-muted">Pilih gambar yang sudah diupload.</p>
+                        </div>
+                        <button type="button" @click="mediaOpen = false" class="be-btn be-btn-ghost px-3 py-1.5 text-sm">✕</button>
+                    </div>
+
+                    <div class="border-b border-line p-4">
+                        <div class="flex gap-2">
+                            <input type="search" class="be-input" placeholder="Cari gambar…"
+                                   x-model="mediaQuery"
+                                   @keydown.enter.prevent="mediaPage = 1; loadMedia()">
+                            <button type="button" class="be-btn be-btn-ghost" @click="mediaPage = 1; loadMedia()">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="max-h-96 overflow-y-auto p-5">
+                        <div x-show="mediaLoading" class="py-10 text-center text-sm text-muted">Memuat…</div>
+
+                        <div x-show="!mediaLoading && mediaList.length === 0" class="py-10 text-center text-sm text-muted">
+                            Tidak ada gambar.
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                            <template x-for="m in mediaList" :key="m.id">
+                                <button type="button"
+                                        class="group relative aspect-square overflow-hidden rounded-xl border border-line bg-ink/5"
+                                        @click="insertMedia(m)">
+                                    <img :src="m.thumb || m.url" :alt="m.name"
+                                         class="h-full w-full object-cover">
+                                    <span class="absolute inset-x-0 bottom-0 bg-black/60 px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+                                        <span x-text="m.name"></span>
+                                    </span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-t border-line p-4">
+                        <span class="text-xs text-muted" x-text="'Halaman ' + mediaPage + ' dari ' + mediaLastPage"></span>
+                        <div class="flex gap-2">
+                            <button type="button" class="be-btn be-btn-ghost text-sm"
+                                    @click="mediaBuka('prev')" :disabled="mediaPage <= 1">← Sebelumnya</button>
+                            <button type="button" class="be-btn be-btn-ghost text-sm"
+                                    @click="mediaBuka('next')" :disabled="mediaPage >= mediaLastPage">Berikutnya →</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MediaFileController;
 use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,9 @@ Route::controller(PagesController::class)->group(function () {
         Route::get('retret-camp', 'retretCamp')->name('retret-camp');
         Route::get('khotbah/{slug}', 'khotbahShow')->name('khotbah.show');
     });
+
+    // Sajikan file media (gambar konten/banner) — publik, tanpa auth.
+    Route::get('media/{media}/{path}', MediaFileController::class)
+        ->where('path', '.*')
+        ->name('media.file');
 });

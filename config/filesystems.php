@@ -60,6 +60,24 @@ return [
             'report' => false,
         ],
 
+        'r2' => [
+            'driver' => 's3',
+            'key' => env('R2_ACCESS_KEY_ID'),
+            'secret' => env('R2_SECRET_ACCESS_KEY'),
+            'region' => env('R2_REGION', 'auto'),
+            'bucket' => env('R2_BUCKET'),
+            'url' => env('R2_URL'),
+            'endpoint' => env('R2_ENDPOINT'),
+            'use_path_style_endpoint' => false,
+            // WAJIB: R2 tidak mendukung object-level ACL; akses publik diatur
+            // di level bucket (r2.dev / custom domain).
+            'visibility' => 'private',
+            'throw' => true,
+            'options' => [
+                'CacheControl' => 'public, max-age=31536000, immutable',
+            ],
+        ],
+
     ],
 
     /*
