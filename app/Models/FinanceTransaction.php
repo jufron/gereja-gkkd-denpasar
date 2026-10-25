@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -12,22 +16,27 @@ use Spatie\Activitylog\Support\LogOptions;
  * Tipe masuk/keluar ditentukan lewat relasi ke FinanceCategory. Transaksi
  * yang salah input tidak dihapus; di-void supaya jejak keuangan tetap utuh.
  */
+#[Table('finance_transactions')]
+#[Fillable([
+    'finance_category_id',
+    'transaction_date',
+    'amount',
+    'description',
+    'reference_no',
+    'status',
+    'voided_at',
+    'void_reason',
+    'created_by',
+])]
 class FinanceTransaction extends Model
 {
     use LogsActivity;
 
-    protected $fillable = [
-        'finance_category_id',
-        'transaction_date',
-        'amount',
-        'description',
-        'reference_no',
-        'status',
-        'voided_at',
-        'void_reason',
-        'created_by',
-    ];
-
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -37,6 +46,10 @@ class FinanceTransaction extends Model
         ];
     }
 
+    /**
+     * Konfigurasi activity log: catat perubahan kolom penting, hanya yang
+     * berubah (dirty), dengan deskripsi event Bahasa Indonesia.
+     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -52,17 +65,32 @@ class FinanceTransaction extends Model
             ->useLogName('keuangan');
     }
 
-    public function category()
+    /**
+     * Kategori keuangan dari transaksi ini (many-to-one).
+     *
+     * @return BelongsTo<FinanceCategory, $this>
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(FinanceCategory::class, 'finance_category_id');
     }
 
-    public function pencatat()
+    /**
+     * Pengguna yang mencatat transaksi ini (many-to-one).
+     *
+     * @return BelongsTo<User, $this>
+     */
+    public function pencatat(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function scopePosted($query)
+    /**
+     * Batasi query ke transaksi berstatus posted (belum di-void).
+     *
+     * @param  Builder  $query  Query Eloquent yang sedang dibangun.
+     */
+    public function scopePosted(Builder $query): Builder
     {
         return $query->where('status', 'posted');
     }
