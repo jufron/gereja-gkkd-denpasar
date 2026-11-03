@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AppSettingSeeder::class,
             BadgeSeeder::class,
             ScheduleSeeder::class,
+            HeroBannerSeeder::class,
             NewsCategorySeeder::class,
             FinanceCategorySeeder::class,
             FinanceTransactionSeeder::class,

@@ -34,10 +34,11 @@
             ],
         ],
         [
-            'label' => 'Berita Management',
+            'label' => 'Konten Management',
             'items' => [
                 ['label' => 'Berita', 'route' => 'admin.berita', 'icon' => 'fa-newspaper'],
                 ['label' => 'Kategori Berita', 'route' => 'admin.kategori-berita', 'icon' => 'fa-tags'],
+                ['label' => 'Banner Beranda', 'route' => 'admin.banner-beranda', 'icon' => 'fa-images'],
             ],
         ],
         [

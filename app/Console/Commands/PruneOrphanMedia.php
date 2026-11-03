@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\AssetLibrary;
 use App\Models\AssetUsage;
+use App\Models\HeroBanner;
 use Illuminate\Console\Command;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -21,6 +22,7 @@ class PruneOrphanMedia extends Command
             ->where('model_type', AssetLibrary::class)
             ->where('created_at', '<', $cutoff)
             ->whereNotIn('id', AssetUsage::select('media_id'))
+            ->whereNotIn('id', HeroBanner::whereNotNull('media_id')->select('media_id'))
             ->get();
 
         $count = 0;

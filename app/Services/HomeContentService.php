@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\Services\HomeContentServiceInterface;
+use App\Models\HeroBanner;
 use App\Models\Schedule;
 
 class HomeContentService implements HomeContentServiceInterface
@@ -98,33 +99,29 @@ class HomeContentService implements HomeContentServiceInterface
             ],
         ];
 
-        // Banner dinamis untuk hero slider.
-        $heroBanners = [
-            [
+        // Banner dinamis untuk hero slider (dari database).
+        $heroBanners = HeroBanner::query()
+            ->with('media')
+            ->active()
+            ->ordered()
+            ->get()
+            ->map(fn (HeroBanner $banner) => [
+                'image' => $banner->media?->getUrl(),
+                'alt' => $banner->alt,
+                'badge' => $banner->badge,
+                'caption' => $banner->caption,
+            ])
+            ->all();
+
+        // jatuh tempo: cegah slider dengan total 0 (modulus nol di Alpine).
+        if ($heroBanners === []) {
+            $heroBanners = [[
                 'image' => asset('images/church-sanctuary.jpg'),
                 'alt' => 'Ruang Ibadah GKKD Denpasar',
                 'badge' => 'Sanctuary GKKD Denpasar',
                 'caption' => 'Suasana ibadah hangat, intim, dan bersahabat',
-            ],
-            [
-                'image' => asset('images/fellowship.jpg'),
-                'alt' => 'Komunitas & Persekutuan Jemaat GKKD Denpasar',
-                'badge' => 'Komunitas Kasih',
-                'caption' => 'Bertumbuh bersama dalam doa dan keakraban keluarga',
-            ],
-            [
-                'image' => asset('images/sunday-school.jpg'),
-                'alt' => 'Kelas Anak Sekolah Minggu GKKD Denpasar',
-                'badge' => 'Sekolah Minggu Ceria',
-                'caption' => 'Pendidikan karakter Alkitab yang interaktif dan ramah anak',
-            ],
-            [
-                'image' => asset('images/outreach.jpg'),
-                'alt' => 'Aksi Kasih Pelayanan Masyarakat Bali',
-                'badge' => 'Aksi Kasih di Bali',
-                'caption' => 'Melayani sesama dengan kepedulian yang tulus',
-            ],
-        ];
+            ]];
+        }
 
         // Khotbah utama yang disorot di halaman home.
         $featuredSermon = [

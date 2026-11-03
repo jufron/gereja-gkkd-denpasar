@@ -70,5 +70,15 @@ class AssetLibrary extends Model implements HasMedia
                     ->width(1200)
                     ->format('webp');
             });
+
+        // Banner slider hero beranda. Tanpa singleFile: koleksi ini dipakai
+        // bersama (kepemilikan media ada di AssetLibrary), satu entitas per banner.
+        $this->addMediaCollection('hero-banner')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->registerMediaConversions(function (Media $media): void {
+                $this->addMediaConversion('hero')
+                    ->width(1200)
+                    ->format('webp');
+            });
     }
 }

@@ -37,6 +37,10 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/', fn () => view('dashboard.index'))->middleware('verified')->name('index');
 
         Route::view('pengaturan', 'dashboard.pengaturan')->name('pengaturan');
+
+        Route::view('banner-beranda', 'dashboard.banner')
+            ->middleware('permission:Kelola Beranda')
+            ->name('banner-beranda');
         Route::get('log-aktivitas', [ActivityLogController::class, 'index'])->name('log-aktivitas');
         Route::view('hak-akses', 'dashboard.hak-akses')->name('hak-akses');
 

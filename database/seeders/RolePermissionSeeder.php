@@ -19,6 +19,7 @@ class RolePermissionSeeder extends Seeder
             'Kelola Berita',
             'Kelola Jadwal',
             'Kelola Keuangan',
+            'Kelola Beranda',
             'Pengaturan',
         ])->map(fn (string $name) => Permission::firstOrCreate(
             ['name' => $name, 'guard_name' => 'web'],
@@ -35,7 +36,7 @@ class RolePermissionSeeder extends Seeder
 
         $matrix = [
             'Administrator' => $permissions->all(),
-            'Pendeta' => ['Kelola Berita', 'Kelola Jadwal'],
+            'Pendeta' => ['Kelola Berita', 'Kelola Jadwal', 'Kelola Beranda'],
             'Bendahara' => ['Kelola Berita', 'Kelola Keuangan'],
             'Tim Pelayanan' => ['Kelola Jadwal'],
             'User' => [],
