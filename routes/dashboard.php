@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Dashboard\BeritaController;
+use App\Http\Controllers\Dashboard\KhotbahController;
 use App\Http\Controllers\Dashboard\MediaLibraryController;
 use App\Http\Controllers\Dashboard\NewsImageController;
+use App\Http\Controllers\Dashboard\PrayerRequestController;
+use App\Http\Controllers\Dashboard\SermonEvaluationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -38,14 +41,34 @@ Route::prefix('dashboard')->group(function () {
 
         Route::view('pengaturan', 'dashboard.pengaturan')->name('pengaturan');
 
-        Route::view('banner-beranda', 'dashboard.banner')
-            ->middleware('permission:Kelola Beranda')
-            ->name('banner-beranda');
         Route::get('log-aktivitas', [ActivityLogController::class, 'index'])->name('log-aktivitas');
         Route::view('hak-akses', 'dashboard.hak-akses')->name('hak-akses');
 
+        Route::view('banner-beranda', 'dashboard.banner')
+            ->middleware('permission:Kelola Beranda')
+            ->name('banner-beranda');
+
         // todo jadwal pelayanan & ibadah
         Route::view('jadwal-pelayanan-dan-ibadah', 'dashboard.jadwal')->middleware('permission:Kelola Jadwal')->name('jadwal-ibadah-dan-pelayanan');
+
+        // Permohonan doa — hanya Administrator.
+        Route::controller(PrayerRequestController::class)->prefix('doa')->name('doa.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('{prayerRequest}', 'show')->name('show');
+            Route::patch('{prayerRequest}/status', 'updateStatus')->name('status');
+            Route::patch('{prayerRequest}/catatan', 'updateCatatan')->name('catatan');
+            Route::delete('{prayerRequest}', 'destroy')->name('destroy');
+            Route::patch('pulihkan/{prayerRequest}', 'restore')->name('pulihkan');
+            Route::delete('hapus-permanen/{prayerRequest}', 'forceDelete')->name('forceDelete');
+        });
+
+        // Evaluasi khotbah bulanan — hanya Administrator.
+        Route::controller(SermonEvaluationController::class)->prefix('evaluasi-khotbah')->name('evaluasi-khotbah.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('{evaluation}', 'show')->name('show');
+            Route::delete('{evaluation}', 'destroy')->name('destroy');
+        });
+
         // todo all user
         Route::get('all-user', [UserController::class, 'index'])->name('all-user');
 
@@ -77,6 +100,18 @@ Route::prefix('dashboard')->group(function () {
             Route::view('kas-masuk', 'dashboard.keuangan-kas', ['tipe' => 'income'])->name('masuk');
             Route::view('kas-keluar', 'dashboard.keuangan-kas', ['tipe' => 'expense'])->name('keluar');
             Route::view('kategori', 'dashboard.keuangan-kategori')->name('kategori');
+        });
+
+        // Rangkuman Khotbah — Administrator + permission.
+        Route::middleware('permission:Kelola Khotbah')->group(function () {
+            Route::controller(KhotbahController::class)->prefix('khotbah')->name('khotbah.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('tambah', 'create')->name('tambah');
+                Route::post('/', 'store')->name('simpan');
+                Route::get('{sermon}/ubah', 'edit')->name('ubah');
+                Route::put('{sermon}', 'update')->name('update');
+                Route::delete('{sermon}', 'destroy')->name('hapus');
+            });
         });
     });
 

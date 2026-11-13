@@ -80,5 +80,15 @@ class AssetLibrary extends Model implements HasMedia
                     ->width(1200)
                     ->format('webp');
             });
+
+        // Gambar utama rangkuman khotbah (16:9) — satu per khotbah.
+        $this->addMediaCollection('sermon-thumbnail')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->registerMediaConversions(function (Media $media): void {
+                $this->addMediaConversion('thumb')
+                    ->width(1200)
+                    ->format('webp');
+            });
     }
 }

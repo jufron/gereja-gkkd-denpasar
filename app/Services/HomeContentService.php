@@ -4,7 +4,10 @@ namespace App\Services;
 
 use App\Contracts\Services\HomeContentServiceInterface;
 use App\Models\HeroBanner;
+use App\Models\News;
 use App\Models\Schedule;
+use App\Models\Sermon;
+use Illuminate\Support\Str;
 
 class HomeContentService implements HomeContentServiceInterface
 {
@@ -68,36 +71,57 @@ class HomeContentService implements HomeContentServiceInterface
             ],
         ];
 
-        // Ringkasan berita terkini.
-        $latestNews = [
-            [
-                'title' => 'Menghadirkan Damai Kristus di Tengah Dinamika Kota Denpasar',
-                'date' => '20 September 2026',
-                'category' => 'Khotbah & Renungan',
-                'image' => asset('images/church-sanctuary.jpg'),
-                'summary' => 'Refleksi mendalam mengenai panggilan jemaat untuk hidup sebagai pembawa damai dan teladan di tempat kerja.',
-                'read_time' => '4 Menit Baca',
-                'link' => route('berita'),
-            ],
-            [
-                'title' => 'Laporan Aksi Kasih: Penyaluran Paket Sembako & Perlengkapan Belajar',
-                'date' => '15 September 2026',
-                'category' => 'Bakti Sosial',
-                'image' => asset('images/outreach.jpg'),
-                'summary' => 'Sebanyak 120 paket perlengkapan sekolah dan kebutuhan pokok telah disalurkan bagi keluarga prasejahtera di Denpasar.',
-                'read_time' => '3 Menit Baca',
-                'link' => route('berita'),
-            ],
-            [
-                'title' => 'Keceriaan Anak-Anak di Kelas Karakter Sekolah Minggu',
-                'date' => '10 September 2026',
-                'category' => 'Sekolah Minggu',
-                'image' => asset('images/sunday-school.jpg'),
-                'summary' => 'Mengenalkan benih firman Tuhan sejak dini melalui metode mendongeng, kreativitas tangan, dan lagu gerak tari.',
-                'read_time' => '3 Menit Baca',
-                'link' => route('berita'),
-            ],
-        ];
+        // Ringkasan berita terkini — ambil dari DB (published terbaru).
+        // Jatuh ke contoh statis bila belum ada data berita.
+        $latestNewsQuery = News::query()
+            ->with(['category', 'mediaUsages.media'])
+            ->published()
+            ->latest('published_at')
+            ->limit(3)
+            ->get();
+
+        if ($latestNewsQuery->isEmpty()) {
+            $latestNews = [
+                [
+                    'title' => 'Menghadirkan Damai Kristus di Tengah Dinamika Kota Denpasar',
+                    'date' => '20 September 2026',
+                    'category' => 'Khotbah & Renungan',
+                    'image' => asset('images/church-sanctuary.jpg'),
+                    'summary' => 'Refleksi mendalam mengenai panggilan jemaat untuk hidup sebagai pembawa damai dan teladan di tempat kerja.',
+                    'read_time' => '4 Menit Baca',
+                    'link' => route('berita'),
+                ],
+                [
+                    'title' => 'Laporan Aksi Kasih: Penyaluran Paket Sembako & Perlengkapan Belajar',
+                    'date' => '15 September 2026',
+                    'category' => 'Bakti Sosial',
+                    'image' => asset('images/outreach.jpg'),
+                    'summary' => 'Sebanyak 120 paket perlengkapan sekolah dan kebutuhan pokok telah disalurkan bagi keluarga prasejahtera di Denpasar.',
+                    'read_time' => '3 Menit Baca',
+                    'link' => route('berita'),
+                ],
+                [
+                    'title' => 'Keceriaan Anak-Anak di Kelas Karakter Sekolah Minggu',
+                    'date' => '10 September 2026',
+                    'category' => 'Sekolah Minggu',
+                    'image' => asset('images/sunday-school.jpg'),
+                    'summary' => 'Mengenalkan benih firman Tuhan sejak dini melalui metode mendongeng, kreativitas tangan, dan lagu gerak tari.',
+                    'read_time' => '3 Menit Baca',
+                    'link' => route('berita'),
+                ],
+            ];
+        } else {
+            $latestNews = $latestNewsQuery->map(fn ($news) => [
+                'title' => $news->title,
+                'date' => $news->published_at?->translatedFormat('d F Y') ?? '',
+                'category' => $news->category?->name ?? 'Berita',
+                'category_color' => $news->category?->color,
+                'image' => $news->banner_url ?: asset('images/church-sanctuary.jpg'),
+                'summary' => $news->excerpt ?: Str::limit(strip_tags($news->content), 140),
+                'read_time' => max(1, (int) ceil(str_word_count(strip_tags($news->content)) / 200)).' Menit Baca',
+                'link' => route('berita.show', $news->slug),
+            ])->all();
+        }
 
         // Banner dinamis untuk hero slider (dari database).
         $heroBanners = HeroBanner::query()
@@ -123,19 +147,36 @@ class HomeContentService implements HomeContentServiceInterface
             ]];
         }
 
-        // Khotbah utama yang disorot di halaman home.
+        // Khotbah utama yang disorot di halaman home — ambil dari DB
+        // (published terbaru). Jatuh ke contoh statis bila belum ada data.
         $featuredSermon = [
             'label' => 'Utama minggu ini',
-            'category' => 'Ibadah Raya Minggu Pagi',
+            'category' => 'Rangkuman Khotbah',
             'date' => 'Minggu, 21 September 2025 • 09.00 WITA',
             'title' => 'Hidup dalam Kasih Karunia yang Cukup',
             'preacher' => 'Pdt. Samuel Wijaya',
-            'verse' => '2 Korintus 12:7–10',
             'excerpt' => 'Paulus mengajarkan bahwa kelemahan bukan penghalang, melainkan ruang di mana kuasa Kristus dinyatakan dengan nyata. Kasih karunia Tuhan selalu cukup untuk menanggung setiap beban kehidupan kita sehari-hari.',
-            'image' => 'https://picsum.photos/seed/pastor-samuel/600/600',
-            'image_alt' => 'Foto Pdt. Samuel Wijaya',
+            'image' => asset('images/church-sanctuary.jpg'),
+            'image_alt' => 'Rangkuman khotbah GKKD Denpasar',
             'detail_slug' => 'hidup-dalam-kasih-karunia-yang-cukup',
         ];
+
+        $sermon = Sermon::published()->with('mediaUsages.media')->latest('preached_at')->first();
+
+        if ($sermon) {
+            $featuredSermon = [
+                'label' => 'Utama minggu ini',
+                'category' => 'Rangkuman Khotbah',
+                'date' => $sermon->preached_at->translatedFormat('l, d F Y'),
+                'title' => $sermon->title,
+                'preacher' => $sermon->preacher,
+                'excerpt' => $sermon->summary,
+                'image' => $sermon->thumbnail_url ?: asset('images/church-sanctuary.jpg'),
+                'image_alt' => $sermon->title,
+                'detail_slug' => $sermon->slug,
+            ];
+        }
+
         $featuredSermon['detail_url'] = route('kegiatan.khotbah.show', $featuredSermon['detail_slug']);
 
         // Kalender event & daftar agenda bulan berjalan.

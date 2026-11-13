@@ -25,5 +25,12 @@ class DatabaseSeeder extends Seeder
             FinanceCategorySeeder::class,
             FinanceTransactionSeeder::class,
         ]);
+
+        if (! app()->runningUnitTests()) {
+            $this->call([
+                NewsSeeder::class,
+                SermonSeeder::class,
+            ]);
+        }
     }
 }

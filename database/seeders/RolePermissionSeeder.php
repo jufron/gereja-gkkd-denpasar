@@ -17,6 +17,7 @@ class RolePermissionSeeder extends Seeder
             'Kelola User',
             'Hak Akses',
             'Kelola Berita',
+            'Kelola Khotbah',
             'Kelola Jadwal',
             'Kelola Keuangan',
             'Kelola Beranda',

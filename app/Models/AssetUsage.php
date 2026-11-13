@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Mencatat pemakaian satu media oleh satu berita.
+ * Mencatat pemakaian satu media oleh satu berita atau satu khotbah.
  *
- * media_id + news_id + kind (content|banner) unik. Media tanpa baris
- * pemakaian apa pun dihapus oleh command `media:prune` setelah grace period.
+ * Tepat salah satu pemilik terisi: news_id (berita) atau sermon_id
+ * (khotbah). Kind: content|banner (berita), thumbnail|preacher (khotbah).
+ * Media tanpa baris pemakaian apa pun dihapus oleh command `media:prune`.
  */
 #[Table('asset_usages')]
 #[Fillable([
     'media_id',
     'news_id',
+    'sermon_id',
     'kind',
 ])]
 class AssetUsage extends Model
@@ -29,6 +31,7 @@ class AssetUsage extends Model
     protected $casts = [
         'media_id' => 'int',
         'news_id' => 'int',
+        'sermon_id' => 'int',
     ];
 
     /**
@@ -49,5 +52,15 @@ class AssetUsage extends Model
     public function news(): BelongsTo
     {
         return $this->belongsTo(News::class);
+    }
+
+    /**
+     * Relasi ke khotbah yang memakai media.
+     *
+     * @return BelongsTo<Sermon, $this>
+     */
+    public function sermon(): BelongsTo
+    {
+        return $this->belongsTo(Sermon::class);
     }
 }

@@ -38,6 +38,9 @@
             'items' => [
                 ['label' => 'Berita', 'route' => 'admin.berita', 'icon' => 'fa-newspaper'],
                 ['label' => 'Kategori Berita', 'route' => 'admin.kategori-berita', 'icon' => 'fa-tags'],
+                ['label' => 'Khotbah', 'route' => 'admin.khotbah.index', 'icon' => 'fa-microphone-lines'],
+                ['label' => 'Permohonan Doa', 'route' => 'admin.doa.index', 'icon' => 'fa-hands-praying'],
+                ['label' => 'Evaluasi Khotbah', 'route' => 'admin.evaluasi-khotbah.index', 'icon' => 'fa-chart-simple'],
                 ['label' => 'Banner Beranda', 'route' => 'admin.banner-beranda', 'icon' => 'fa-images'],
             ],
         ],
