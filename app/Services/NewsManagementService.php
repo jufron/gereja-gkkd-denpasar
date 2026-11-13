@@ -199,11 +199,12 @@ final class NewsManagementService implements NewsManagementServiceInterface
 
     /**
      * Ambil id media dari URL gambar pada konten.
-     * Path media library berbentuk .../media/{id}/nama-file.ext
+     * Path media library berbentuk .../media/{id}/nama-file.ext atau
+     * .../storage/{id}/nama-file.ext (setelah generator URL default dipakai).
      */
     private function mediaIdsFromHtml(string $html): array
     {
-        preg_match_all('#/media/(\d+)/#', $html, $matches);
+        preg_match_all('#/(?:media|storage)/(\d+)/#', $html, $matches);
 
         return array_values(array_unique(array_map('intval', $matches[1])));
     }
