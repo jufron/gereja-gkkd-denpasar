@@ -91,6 +91,16 @@
                                 'created' => 'success',
                                 'updated' => 'accent',
                                 'deleted' => 'danger',
+                                'Doa baru masuk' => 'success',
+                                'Ubah status doa' => 'accent',
+                                'Doa dipindah ke sampah' => 'danger',
+                                'Doa dipulihkan' => 'success',
+                                'Doa dihapus permanen' => 'danger',
+                                'Ubah catatan internal doa' => 'accent',
+                                'Hapus evaluasi khotbah' => 'danger',
+                                'Ubah status banner' => 'accent',
+                                'Ubah urutan banner' => 'accent',
+                                'Hapus media' => 'danger',
                             ];
                             $tone = $tones[$activity->description] ?? 'neutral';
 
@@ -104,6 +114,16 @@
                                 'created' => 'fa-plus',
                                 'updated' => 'fa-pen',
                                 'deleted' => 'fa-trash-can',
+                                'Doa baru masuk' => 'fa-hands-praying',
+                                'Ubah status doa' => 'fa-arrows-rotate',
+                                'Doa dipindah ke sampah' => 'fa-trash-can',
+                                'Doa dipulihkan' => 'fa-rotate-left',
+                                'Doa dihapus permanen' => 'fa-eraser',
+                                'Ubah catatan internal doa' => 'fa-pen-to-square',
+                                'Hapus evaluasi khotbah' => 'fa-trash-can',
+                                'Ubah status banner' => 'fa-toggle-on',
+                                'Ubah urutan banner' => 'fa-arrows-up-down',
+                                'Hapus media' => 'fa-image',
                             ];
                             $icon = $icons[$activity->description] ?? 'fa-clock-rotate-left';
 

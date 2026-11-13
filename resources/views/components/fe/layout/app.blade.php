@@ -15,6 +15,19 @@
             <meta name="description" content="{{ $description }}">
         @endif
 
+        <link rel="canonical" href="{{ url()->current() }}">
+
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{{ config('app.name', 'GKKD Denpasar') }}">
+        <meta property="og:title" content="{{ $title ?? config('app.name', 'GKKD Denpasar') }}">
+        <meta property="og:description" content="{{ $description }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:image" content="{{ asset('images/logo.jpeg') }}">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $title ?? config('app.name', 'GKKD Denpasar') }}">
+        <meta name="twitter:description" content="{{ $description }}">
+        <meta name="twitter:image" content="{{ asset('images/logo.jpeg') }}">
+
         {{-- Set the theme before paint to avoid a flash of the wrong color scheme. --}}
         <script>
             (function () {
@@ -35,8 +48,10 @@
         {{-- <link rel="stylesheet" href="{{ asset('build/assets/app-CwDpOhRs.css') }}">
         <script src="{{ asset('build/assets/app-BdJKuoxM.js') }}" defer></script> --}}
 
-        {{-- FullCalendar CDN (terintegrasi dengan layout FlyonUI / Tailwind CSS) --}}
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+        {{-- FullCalendar — hanya dibutuhkan di halaman home. defer=mencegah render-blocking. --}}
+        @if (request()->routeIs('home'))
+            <script defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+        @endif
 
         @stack('head')
 
@@ -60,7 +75,7 @@
             {{ $slot }}
         </main>
 
-        <x-fe.footer />
+        <x-fe.footer :flush="request()->routeIs('kegiatan.pelayanan')" />
 
         <x-fe.whatsapp-button />
         <x-fe.back-to-top />

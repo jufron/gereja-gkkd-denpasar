@@ -12,6 +12,9 @@ export default defineConfig({
                 bunny('Instrument Sans', {
                     weights: [400, 500, 600, 700],
                 }),
+                bunny('Instrument Serif', {
+                    weights: [400],
+                }),
                 bunny('Inter', {
                     weights: [300, 400, 500, 600, 700, 800],
                 }),

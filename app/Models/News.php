@@ -108,6 +108,8 @@ class News extends Model
 
     /**
      * Scope: ambil berita berstatus published yang sudah dijadwalkan tayang.
+     *
+     * @param  Builder  $query  Query Eloquent yang sedang dibangun.
      */
     public function scopePublished(Builder $query): Builder
     {
@@ -118,6 +120,8 @@ class News extends Model
 
     /**
      * Scope: ambil hanya berita berstatus draft.
+     *
+     * @param  Builder  $query  Query Eloquent yang sedang dibangun.
      */
     public function scopeDraft(Builder $query): Builder
     {

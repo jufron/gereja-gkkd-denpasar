@@ -215,6 +215,11 @@ final class BannerManager extends Component
         $banner = HeroBanner::findOrFail($bannerId);
         $banner->update(['is_active' => ! $banner->is_active]);
 
+        activity('beranda')
+            ->on($banner)
+            ->withProperties(['badge' => $banner->badge, 'is_active' => $banner->is_active])
+            ->log('Ubah status banner');
+
         unset($this->banners);
     }
 
@@ -234,6 +239,10 @@ final class BannerManager extends Component
         $tmp = $banner->sort_order;
         $banner->update(['sort_order' => $tetangga->sort_order]);
         $tetangga->update(['sort_order' => $tmp]);
+
+        activity('beranda')
+            ->withProperties(['badge' => $banner->badge])
+            ->log('Ubah urutan banner');
 
         unset($this->banners);
     }

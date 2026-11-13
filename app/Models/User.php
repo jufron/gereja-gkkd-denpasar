@@ -27,6 +27,8 @@ class User extends Authenticatable
     /**
      * OAuth providers linked to this user (Google, Facebook, ...).
      * A user may have several, or none at all (plain email registration).
+     *
+     * @return HasMany<SocialAccount, $this>
      */
     public function socialAccounts(): HasMany
     {
@@ -35,6 +37,8 @@ class User extends Authenticatable
 
     /**
      * Profil jemaat milik akun ini (one-to-one).
+     *
+     * @return HasOne<Profile, $this>
      */
     public function profile(): HasOne
     {

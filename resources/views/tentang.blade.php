@@ -3,14 +3,15 @@
     description="Mengenal visi, misi, nilai iman, dan perjalanan pelayanan GKKD Denpasar dalam memberkati jemaat serta masyarakat di Bali."
 >
     {{-- Header Halaman --}}
-    <section class="border-b border-line bg-ink/5 pt-12 pb-16 lg:pt-16 lg:pb-20">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
+    <section class="relative overflow-hidden border-b border-line bg-ink/5 pt-12 pb-16 lg:pt-16 lg:pb-20">
+        <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-accent/10 blur-3xl hero-float"></div>
+        <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl" data-reveal>
                 <span class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted">
                     Gereja Kristen Kemah Daud
                 </span>
                 <h1 class="mt-4 text-4xl leading-[1.12] font-semibold tracking-tight text-ink sm:text-5xl lg:text-6xl">
-                    Bertumbuh dalam kasih Kristus, melayani dengan kerendahan hati
+                    Bertumbuh dalam <em class="font-display font-normal italic text-accent">kasih Kristus</em>, melayani dengan <em class="font-display font-normal italic text-accent">kerendahan hati</em>
                 </h1>
                 <p class="mt-5 text-base leading-relaxed text-muted sm:text-lg">
                     GKKD Denpasar hadir sebagai wadah persekutuan bagi setiap orang yang rindu berakar dalam firman Tuhan dan menjadi berkat bagi sesama di Bali.
@@ -23,7 +24,7 @@
     <section class="py-16 lg:py-24">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
-                <div class="lg:col-span-5">
+                <div class="lg:col-span-5" data-reveal>
                     <h2 class="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
                         Arah langkah dan panggilan kami
                     </h2>
@@ -31,7 +32,7 @@
                         Setiap program, ibadah, dan persekutuan yang kami bangun diarahkan untuk memuliakan Allah dan membimbing jemaat menjadi murid Kristus yang berbuah.
                     </p>
 
-                    <div class="mt-8 rounded-2xl border border-line bg-surface p-6">
+                    <div class="group mt-8 rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_32px_-16px_rgba(138,0,194,0.35)]">
                         <div class="flex items-center gap-3">
                             <span class="flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 font-bold text-accent dark:text-accent-soft">
                                 V
@@ -44,8 +45,8 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-7">
-                    <div class="rounded-2xl border border-line bg-ink/5 p-8">
+                <div class="lg:col-span-7" data-reveal style="transition-delay:160ms">
+                    <div class="rounded-2xl border border-line bg-ink/5 p-8 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_12px_32px_-16px_rgba(138,0,194,0.35)]">
                         <h3 class="text-xl font-semibold text-ink">Misi</h3>
                         <div class="mt-6 space-y-6">
                             <div class="flex gap-4">
@@ -94,7 +95,8 @@
             </div>
 
             <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <div class="rounded-2xl border border-line bg-surface p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_32px_-16px_rgba(138,0,194,0.35)]" data-reveal>
+                    <span aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent/0 via-accent to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
                     <span class="text-xs font-bold text-accent dark:text-accent-soft">01</span>
                     <h3 class="mt-2 text-lg font-semibold text-ink">Kebenaran Firman</h3>
                     <p class="mt-2 text-sm leading-relaxed text-muted">
@@ -102,7 +104,8 @@
                     </p>
                 </div>
 
-                <div class="rounded-2xl border border-line bg-surface p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_32px_-16px_rgba(138,0,194,0.35)]" data-reveal style="transition-delay:80ms">
+                    <span aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent/0 via-accent to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
                     <span class="text-xs font-bold text-accent dark:text-accent-soft">02</span>
                     <h3 class="mt-2 text-lg font-semibold text-ink">Kasih yang Tulus</h3>
                     <p class="mt-2 text-sm leading-relaxed text-muted">
@@ -110,7 +113,8 @@
                     </p>
                 </div>
 
-                <div class="rounded-2xl border border-line bg-surface p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_32px_-16px_rgba(138,0,194,0.35)]" data-reveal style="transition-delay:160ms">
+                    <span aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent/0 via-accent to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
                     <span class="text-xs font-bold text-accent dark:text-accent-soft">03</span>
                     <h3 class="mt-2 text-lg font-semibold text-ink">Kerendahan Hati</h3>
                     <p class="mt-2 text-sm leading-relaxed text-muted">
@@ -118,7 +122,8 @@
                     </p>
                 </div>
 
-                <div class="rounded-2xl border border-line bg-surface p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_32px_-16px_rgba(138,0,194,0.35)]" data-reveal style="transition-delay:240ms">
+                    <span aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent/0 via-accent to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
                     <span class="text-xs font-bold text-accent dark:text-accent-soft">04</span>
                     <h3 class="mt-2 text-lg font-semibold text-ink">Integritas Hidup</h3>
                     <p class="mt-2 text-sm leading-relaxed text-muted">
@@ -139,51 +144,60 @@
                 Beberapa hal praktis yang kerap ditanyakan oleh jemaat atau tamu yang baru pertama kali hadir.
             </p>
 
-            <div class="mt-8 space-y-4" x-data="{ active: null }">
-                <div class="rounded-2xl border border-line bg-surface p-5">
+            <div class="mt-8 space-y-4" x-data="{ active: null }" data-reveal>
+                <div class="rounded-2xl border border-line bg-surface p-5 transition-colors duration-300 hover:border-accent/40">
                     <button
                         type="button"
                         @click="active = (active === 1 ? null : 1)"
-                        class="flex w-full items-center justify-between text-left text-base font-semibold text-ink"
+                        :aria-expanded="active === 1 ? 'true' : 'false'"
+                        aria-controls="faq-panel-1"
+                        id="faq-button-1"
+                        class="flex w-full items-center justify-between text-left text-base font-semibold text-ink rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                     >
                         <span>Pakaian seperti apa yang disarankan untuk ibadah hari Minggu?</span>
                         <svg class="h-5 w-5 shrink-0 text-muted transition-transform duration-200" :class="active === 1 && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
                         </svg>
                     </button>
-                    <div x-show="active === 1" x-collapse x-cloak class="mt-3 text-sm leading-relaxed text-muted">
+                    <div id="faq-panel-1" role="region" aria-labelledby="faq-button-1" x-show="active === 1" x-collapse x-cloak class="mt-3 text-sm leading-relaxed text-muted">
                         Kami menyambut Anda dengan hangat dalam pakaian santai rapi, sopan, atau batik. Yang terpenting adalah hati yang rindu menyembah Tuhan.
                     </div>
                 </div>
 
-                <div class="rounded-2xl border border-line bg-surface p-5">
+                <div class="rounded-2xl border border-line bg-surface p-5 transition-colors duration-300 hover:border-accent/40">
                     <button
                         type="button"
                         @click="active = (active === 2 ? null : 2)"
-                        class="flex w-full items-center justify-between text-left text-base font-semibold text-ink"
+                        :aria-expanded="active === 2 ? 'true' : 'false'"
+                        aria-controls="faq-panel-2"
+                        id="faq-button-2"
+                        class="flex w-full items-center justify-between text-left text-base font-semibold text-ink rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                     >
                         <span>Apakah ada ruangan dan ibadah khusus untuk anak-anak?</span>
                         <svg class="h-5 w-5 shrink-0 text-muted transition-transform duration-200" :class="active === 2 && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
                         </svg>
                     </button>
-                    <div x-show="active === 2" x-collapse x-cloak class="mt-3 text-sm leading-relaxed text-muted">
+                    <div id="faq-panel-2" role="region" aria-labelledby="faq-button-2" x-show="active === 2" x-collapse x-cloak class="mt-3 text-sm leading-relaxed text-muted">
                         Ya, kami menyediakan Sekolah Minggu yang berjalan bersamaan dengan Ibadah Raya pagi pukul 09.00 WITA. Ruang ramah anak didampingi oleh guru-guru yang penuh kasih dan terlatih.
                     </div>
                 </div>
 
-                <div class="rounded-2xl border border-line bg-surface p-5">
+                <div class="rounded-2xl border border-line bg-surface p-5 transition-colors duration-300 hover:border-accent/40">
                     <button
                         type="button"
                         @click="active = (active === 3 ? null : 3)"
-                        class="flex w-full items-center justify-between text-left text-base font-semibold text-ink"
+                        :aria-expanded="active === 3 ? 'true' : 'false'"
+                        aria-controls="faq-panel-3"
+                        id="faq-button-3"
+                        class="flex w-full items-center justify-between text-left text-base font-semibold text-ink rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                     >
                         <span>Bagaimana cara bergabung dalam kelompok sel atau persekutuan wilayah?</span>
                         <svg class="h-5 w-5 shrink-0 text-muted transition-transform duration-200" :class="active === 3 && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
                         </svg>
                     </button>
-                    <div x-show="active === 3" x-collapse x-cloak class="mt-3 text-sm leading-relaxed text-muted">
+                    <div id="faq-panel-3" role="region" aria-labelledby="faq-button-3" x-show="active === 3" x-collapse x-cloak class="mt-3 text-sm leading-relaxed text-muted">
                         Anda dapat menghubungi tim penyambut jemaat di meja informasi seusai ibadah, atau mengirim pesan melalui halaman Kontak. Kami akan menghubungkan Anda dengan koordinator wilayah terdekat tempat tinggal Anda.
                     </div>
                 </div>

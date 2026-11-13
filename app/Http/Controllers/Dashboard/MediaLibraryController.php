@@ -48,7 +48,11 @@ final class MediaLibraryController extends Controller
      */
     public function destroy(Media $media)
     {
-        abort_if(AssetUsage::where('media_id', $media->id)->exists(), 422, 'Aset sedang dipakai berita.');
+        abort_if(AssetUsage::where('media_id', $media->id)->exists(), 422, 'Aset sedang dipakai konten.');
+
+        activity('media')
+            ->withProperties(['file' => $media->file_name])
+            ->log('Hapus media');
 
         $media->delete();
 

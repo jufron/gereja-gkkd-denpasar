@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /auth
+Disallow: /dashboard
+Disallow: /admin
+Allow: /
+
+Sitemap: https://gkkd-denpasar.test/sitemap.xml

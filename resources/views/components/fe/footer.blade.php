@@ -1,3 +1,5 @@
+@props(['flush' => false])
+
 @php
     // TODO: arahkan setiap tautan ke halaman yang sebenarnya.
     $navLinks = [
@@ -31,16 +33,18 @@
     ];
 
     // Footer selalu gelap, terlepas dari tema halaman.
-    $linkClass = 'text-sm text-neutral-300 transition-colors hover:text-accent-soft';
+    $linkClass = 'footer-link text-sm text-neutral-300 transition-colors hover:text-accent-soft';
     $labelClass = 'text-xs font-medium text-neutral-400';
     $focusRing = 'rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-soft focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950';
 @endphp
 
-<footer class="mt-24 overflow-hidden bg-neutral-950 text-neutral-100">
+<footer class="relative {{ $flush ? 'mt-0' : 'mt-10' }} overflow-hidden bg-neutral-950 text-neutral-100">
+    <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-accent/15 blur-3xl hero-float -z-10"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-accent/10 blur-3xl hero-float-slow -z-10"></div>
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {{-- Ajakan utama + jadwal ibadah --}}
         <div class="grid gap-12 border-b border-white/10 py-14 lg:grid-cols-12 lg:gap-16 lg:py-20">
-            <div class="lg:col-span-7">
+            <div class="lg:col-span-7" data-reveal>
                 <div class="flex items-center gap-2.5">
                     <span class="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-[#121212] ring-1 ring-white/15">
                         <img
@@ -66,7 +70,7 @@
                 </a>
             </div>
 
-            <div class="lg:col-span-5 lg:w-full lg:max-w-sm lg:justify-self-end">
+            <div class="lg:col-span-5 lg:w-full lg:max-w-sm lg:justify-self-end" data-reveal style="transition-delay:80ms">
                 <h3 class="{{ $labelClass }}">Jadwal Ibadah</h3>
                 <dl class="mt-5 divide-y divide-white/10 border-y border-white/10">
                     @foreach ($services as $service)
@@ -87,7 +91,7 @@
 
         {{-- Tautan, lokasi, dan sosial media --}}
         <div class="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-16">
-            <div class="lg:col-span-5">
+            <div class="lg:col-span-5" data-reveal style="transition-delay:160ms">
                 <h3 class="{{ $labelClass }}">Jelajahi</h3>
                 <ul class="mt-5 grid grid-cols-2 gap-x-6 gap-y-3">
                     @foreach ($navLinks as $link)
@@ -98,7 +102,7 @@
                 </ul>
             </div>
 
-            <div class="lg:col-span-4">
+            <div class="lg:col-span-4" data-reveal style="transition-delay:220ms">
                 <h3 class="{{ $labelClass }}">Lokasi &amp; Kontak</h3>
                 <div class="mt-5 space-y-3 text-sm text-neutral-300">
                     <a
@@ -116,14 +120,14 @@
                 </div>
             </div>
 
-            <div class="sm:col-span-2 lg:col-span-3 lg:justify-self-end">
+            <div class="sm:col-span-2 lg:col-span-3 lg:justify-self-end" data-reveal style="transition-delay:280ms">
                 <h3 class="{{ $labelClass }}">Media Sosial</h3>
                 <div class="mt-5 flex items-center gap-3">
                     @foreach ($socialLinks as $social)
                         <a
                             href="{{ $social['href'] }}"
                             aria-label="{{ $social['label'] }}"
-                            class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-neutral-300 transition-colors hover:bg-accent hover:text-white {{ $focusRing }}"
+                            class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-neutral-300 transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:text-white hover:shadow-[0_8px_20px_-8px_rgba(138,0,194,0.7)] {{ $focusRing }}"
                         >
                             @if ($social['icon'] === 'instagram')
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -147,9 +151,14 @@
         </div>
     </div>
 
-    <div class="border-t border-white/10">
+    <div class="border-t border-white/10" data-reveal style="transition-delay:240ms">
         <div class="mx-auto max-w-7xl px-4 py-6 text-center text-xs text-neutral-400 sm:px-6 lg:px-8">
             <p>&copy; {{ date('Y') }} Gereja Kristen Kemah Daud Denpasar. Hak cipta dilindungi.</p>
+            <p class="mt-2">
+                <a href="{{ route('kebijakan-privasi') }}" class="transition-colors hover:text-neutral-200 {{ $focusRing }}">
+                    Kebijakan Privasi
+                </a>
+            </p>
         </div>
     </div>
 </footer>

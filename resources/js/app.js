@@ -1,6 +1,7 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../vendor/power-components/livewire-powergrid/dist/powergrid';
 import './news-editor';
+import './khotbah-editor';
 
 const root = document.documentElement;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -111,3 +112,27 @@ if (sentinel && 'IntersectionObserver' in window) {
 backToTop?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
 });
+
+/* ---------------------------------------------------------------------------
+ * Scroll reveal. Adds the `.reveal-ready` flag only when IntersectionObserver
+ * is available and the user has not asked for reduced motion. Elements stay
+ * fully visible otherwise (progressive enhancement).
+ * ------------------------------------------------------------------------- */
+const revealables = document.querySelectorAll('[data-reveal]');
+
+if (revealables.length && 'IntersectionObserver' in window && !prefersReducedMotion) {
+    root.classList.add('reveal-ready');
+
+    const reveal = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                reveal.unobserve(entry.target);
+            });
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+    );
+
+    revealables.forEach((el) => reveal.observe(el));
+}

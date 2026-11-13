@@ -13,7 +13,7 @@
             'href' => route('kegiatan.index'),
             'active' => request()->routeIs('kegiatan.*'),
             'children' => [
-                ['label' => 'Pelayanan', 'href' => route('kegiatan.pelayanan'), 'active' => request()->routeIs('kegiatan.pelayanan')],
+                ['label' => 'Pelayanan', 'href' => route('kegiatan.pelayanan'), 'active' => request()->routeIs('kegiatan.pelayanan*')],
                 ['label' => 'Komsel', 'href' => route('kegiatan.komsel'), 'active' => request()->routeIs('kegiatan.komsel')],
                 ['label' => 'Retret/Camp 12', 'href' => route('kegiatan.retret-camp'), 'active' => request()->routeIs('kegiatan.retret-camp')],
             ],
@@ -43,7 +43,7 @@
     $focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface';
 @endphp
 
-<header data-navbar x-data class="sticky top-0 z-40 w-full">
+<header data-navbar x-data class="sticky top-0 z-40 w-full" @if (request()->routeIs('home', 'kegiatan.pelayanan')) data-over-hero @endif>
     <div class="nav-shell px-4 sm:px-6 lg:px-8">
         <div class="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-3 lg:grid-cols-[1fr_auto_1fr]">
             {{-- Kiri: logo + nama brand --}}
